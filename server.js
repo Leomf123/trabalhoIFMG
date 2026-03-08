@@ -1,12 +1,10 @@
 const express = require('express');
 const app = express();
+const routes = require('./router');
 
 app.use(express.urlencoded({ extended: true}));
 
-app.get('/', (req, res) => {
-    res.send('Olá Mundo!');
-});
-
+app.use(routes);
 
 app.use((req, res, next) => {
     res.status(404).send('Erro 404 - Página não encontrada!');
