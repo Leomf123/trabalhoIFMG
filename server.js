@@ -7,6 +7,11 @@ app.get('/', (req, res) => {
     res.send('Olá Mundo!');
 });
 
+
+app.use((req, res, next) => {
+    res.status(404).send('Erro 404 - Página não encontrada!');
+})
+
 const porta = 3000;
 app.listen(porta,() => {
     console.log("Servidor execuntado em: ");
