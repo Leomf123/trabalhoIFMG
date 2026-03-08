@@ -1,11 +1,15 @@
 const express = require('express');
-const app = express();
+const path = require('path');
 const routes = require('./router');
+const app = express();
 
 app.use(express.urlencoded({ extended: true}));
-
 app.use(routes);
 
+app.set('views', path.resolve(__dirname, 'src', 'views'));
+app.set('view engine', 'ejs');
+
+//Rota 404
 app.use((req, res, next) => {
     res.status(404).send('Erro 404 - Página não encontrada!');
 })
