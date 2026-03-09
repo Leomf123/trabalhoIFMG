@@ -3,7 +3,10 @@ const path = require('path');
 const routes = require('./routes');
 const app = express();
 
+const {middleawareGlobal} = require('./src/middlewares/middlewares');
+
 app.use(express.urlencoded({ extended: true}));
+app.use(middleawareGlobal);
 app.use(routes);
 
 app.set('views', path.resolve(__dirname, 'src', 'views'));
