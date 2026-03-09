@@ -12,7 +12,7 @@ function connect(){
 
     db.run(`
         CREATE TABLE IF NOT EXISTS tabelaExemplo(
-            id INTECER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             email TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL
         )
@@ -20,3 +20,35 @@ function connect(){
 
     return db;
 }
+
+function run(sql, params = []){
+    const database = connect();
+    return new Promise((resolve, reject) => {
+        database.run(sql, params, function(err){
+            if(err) return reject(err);
+            resolve({ id: this.lastID, changes: this.changes});
+        });
+    });
+}
+
+function get(sql, params = []){
+    const database = connect();
+    return new Promise((resolve, reject) => {
+        database.get(sql, params, (err, row) => {
+            if(err) return reject(err);
+            resolve(row);
+        });
+    });
+}
+
+function all(sql, params = []){
+    const database = connect();
+    return new Promise((resolve, reject) => {
+        database.get(sql, params, (err, rows) => {
+            if(err) return reject(err);
+            resolve(rows);
+        });
+    });
+}
+
+module.exports = {connect, run, get, all};

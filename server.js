@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const {connect} = require('./src/database/connection');
 const routes = require('./routes');
 const app = express();
 
@@ -21,4 +22,5 @@ const porta = 3000;
 app.listen(porta,() => {
     console.log("Servidor execuntado em: ");
     console.log("http://127.0.0.1:" + porta);
+    connect();
 } );
