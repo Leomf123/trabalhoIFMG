@@ -1,3 +1,4 @@
-exports.index = (req, res) => {
+exports.index = (req, res, next) => {
     res.render('index');
+    next();
 }
