@@ -2,36 +2,33 @@
 <%-include('./includes/nav2') %>
 
 <div class="container">
-
-    <div class="container">
-         <h1>Cadastrar Novo Usuário</h1>
-    </div>
-
     <div class="row">
         <div class="col-log-2"></div>
-        <div class="col-log-8">
+         <h1 class="text-center">Cadastrar Novo Usuário</h1>
+
+        <div class="col-log-8 my-3">
             <form action="/usuario/cadastrar" method="post">
                 <div class="form-group">
                     <label>Nome</label>
-                    <input type="text" name="nome">
+                    <input type="text" class="form-control my-2" name="nome">
                 </div>
 
                 <div class="form-group">
                     <label>Sobrenome</label>
-                    <input type="text" name="sobrenome">
+                    <input type="text" class="form-control my-2" name="sobrenome">
                 </div>
 
                 <div class="form-group">
                     <label>E-mail</label>
-                    <input type="email" name="email">
+                    <input type="email" class="form-control my-2" name="email">
                 </div>
 
                 <div class="form-group">
                     <label>Telefone</label>
-                    <input type="tel" name="telefone">
+                    <input type="tel" class="form-control my-2" name="telefone">
                 </div>
 
-                <button type="submit">Cadastrar</button>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
 
             </form>
         </div>
