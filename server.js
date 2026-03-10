@@ -15,7 +15,7 @@ app.set('view engine', 'ejs');
 
 //Rota 404
 app.use((req, res, next) => {
-    res.status(404).send('Erro 404 - Página não encontrada!');
+    res.status(404).render('404');
 })
 
 const porta = 3000;
