@@ -13,10 +13,12 @@ function connect(){
     db = new sqlite3.Database(dbPath);
 
     db.run(`
-        CREATE TABLE IF NOT EXISTS tabelaExemplo(
+        CREATE TABLE IF NOT EXISTS usuarios(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            sobrenome TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
+            telefone TEXT NOT NULL
         )
     `);
 
