@@ -14,7 +14,7 @@ exports.register = async (req, res) => {
         return res.redirect(`/usuario/${novo.id}`);
     } catch(e){
         console.log(e);
-        return res.render('404');
+        return res.status(404).render('404');
     }
 }
 
