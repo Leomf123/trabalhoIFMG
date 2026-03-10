@@ -6,6 +6,7 @@ exports.index = (req, res) => {
 }
 
 //Por post
+/*
 exports.register = async (req, res) => {
     try{
         const usuario = new Usuario(req.body);
@@ -23,3 +24,4 @@ exports.sucess = (req, res) => {
     //res.send('Usuário cadastrado com sucesso!');
     res.render('cadastrarUsuarioSucesso');
 }
+*/
