@@ -20,5 +20,4 @@ app.listen(porta,() => {
     console.log("Servidor execuntado em: ");
     console.log("http://127.0.0.1:" + porta);
     connect();
-    console.log('Teste Christian');
 } );
