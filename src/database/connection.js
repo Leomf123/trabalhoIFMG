@@ -22,6 +22,8 @@ function connect(){
         )
     `);
 
+    //To do: criar tabela produtos
+
     return db;
 }
 
