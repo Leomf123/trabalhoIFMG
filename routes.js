@@ -12,8 +12,9 @@ router.get('/', homeController.index);
 
 //Rotas Login Usuário
 router.get('/login/index', loginController.index);
-router.post('/login/index', loginController.login);
-router.get('/login/dashboard', loginController.loginSucessOrError);
+router.get('/login/logout', loginController.logout);
+router.post('/login/login', loginController.login);
+router.post('/login/register', loginController.register);
 
 //Rotas Perfil Usuário
 router.get('/usuario/perfil', perfilController.index);
