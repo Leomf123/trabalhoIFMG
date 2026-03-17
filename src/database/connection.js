@@ -21,6 +21,14 @@ function connect(){
     `);
 
     //To do: criar tabela produtos
+    db.run(`
+        CREATE TABLE IF NOT EXISTS products(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT UNIQUE NOT NULL,
+            description TEXT NOT NULL,
+            price TEXT NOT NULL
+        )
+    `);
 
     return db;
 }
