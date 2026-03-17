@@ -2,7 +2,8 @@ const Usuario = require('../models/UsuariosModel');
 
 //Por get
 exports.index = (req, res) => {
-    res.render('login');
+    const erroMsg = req.flash('erro');
+    res.render('login', { erroMsg });
 }
 
 //Por post
@@ -24,6 +25,13 @@ exports.login = (req, res) => {
         email: usuarioEncontrado.email,
         logado: true
     };
+
+    const senhaCorreta = false;
+    if(!senhaCorreta){
+        req.flash('erro', 'E-mail ou senha inválidos! Tente novamente.');
+        console.log('Senha Incorreta');
+        return res.redirect('/login/index');
+    }
 
     res.redirect('/login/dashboard');
 }
