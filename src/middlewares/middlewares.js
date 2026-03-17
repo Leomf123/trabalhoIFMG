@@ -1,13 +1,6 @@
-module.exports.middleawareGlobal = (req, res, next) => {
-    console.log('Middleware global');
+module.exports.middlewareGlobal = (req, res, next) => {
+    res.locals.errors = req.flash('errors');
+    res.locals.success = req.flash('success');
+    res.locals.user = req.session.user;
     next();
-}
-
-module.exports.middlewareHomeInicial = (req, res, next) => {
-    console.log('Middleare Incial Home por get');
-    next();
-}
-
-module.exports.middlewareHomeFinal = (req, res) => {
-    console.log('Middleare Final Home por get');
 }

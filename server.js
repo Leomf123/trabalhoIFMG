@@ -7,6 +7,7 @@ const app = express();
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 const flash = require('connect-flash');
+const {middlewareGlobal} = require('./src/middlewares/middlewares');
 
 app.use(session({
     secret: 'fgsgsfdgsfdgsfdgsfhnmjb',
@@ -21,10 +22,10 @@ app.use(session({
         httpOnly: true
     }
 }));
+app.use(express.urlencoded({ extended: true}));
 
 app.use(flash());
-
-app.use(express.urlencoded({ extended: true}));
+app.use(middlewareGlobal);
 app.use(routes);
 
 app.set('views', path.resolve(__dirname, 'src', 'views'));
