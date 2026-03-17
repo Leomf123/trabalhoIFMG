@@ -4,6 +4,26 @@ const {connect} = require('./src/database/connection');
 const routes = require('./routes');
 const app = express();
 
+const session = require('express-session');
+const SQLiteStore = require('connect-sqlite3')(session);
+const flash = require('connect-flash');
+
+app.use(session({
+    secret: 'fgsgsfdgsfdgsfdgsfhnmjb',
+    resave: false,
+    saveUninitialized: false,
+    store: new SQLiteStore({
+        db: 'session.sqlite',
+        dir: './database'
+    }),
+    cookie: {
+        maxAge: 100 * 60 * 60 * 24 * 7, // 7 dias em milisegundos
+        httpOnly: true
+    }
+}));
+
+app.use(flash());
+
 app.use(express.urlencoded({ extended: true}));
 app.use(routes);
 

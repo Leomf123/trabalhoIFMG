@@ -10,10 +10,12 @@ const produtoController = require('./src/controllers/produtoController');
 //Rotas Home
 router.get('/', homeController.index);
 
-//Rota Login
+//Rotas Login Usuário
 router.get('/login/index', loginController.index);
+router.post('/login/index', loginController.login);
+router.get('/login/dashboard', loginController.loginSucessOrError);
 
-//Rota Perfil Usuário
+//Rotas Perfil Usuário
 router.get('/usuario/perfil', perfilController.index);
 
 // Wharley - Rota para página de edição
