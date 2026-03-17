@@ -6,33 +6,32 @@ class Produtos{
         this.errors = []; //armazenar erros que possa acontecer
     }
 
-    async register(){
+    // Cadastrar Produtos
+    async register() {
         this.valida();
-        if(this.errors.length > 0) return;
+        if (this.errors.length > 0) return;
 
-        await this.productExists(id, this.body.name);
-        if(this.errors.length > 0) return;
+        await this.productExists(this.body.name);
+        if (this.errors.length > 0) return;
 
-        try{
-            const result = await db.run(
-                `INSERT INTO products (
-                name,
-                description,
-                price) VALUES (?, ?, ?)`,
-                [
-                    this.body.name,
-                    this.body.description,
-                    this.body.price
-                ]
-            )
-           
-            return {id: result.id};
 
-        } catch(e){
+        const result = await db.run(
+            `INSERT INTO products (
+                    name,
+                    description,
+                    price) VALUES (?, ?, ?)`,
+            [
+                this.body.name,
+                this.body.description,
+                this.body.price
+            ]
+        );
 
-        }
+        //Retorna o ID do produto criado
+        return { id: result.id };
     }
 
+    // Atualizar/ Editar produto
     async edit(id){
         if(!id) return;
 
@@ -56,6 +55,7 @@ class Produtos{
         return await Produtos.buscarPorId(id);
     }
 
+    //Verifica se o produto já existe
     async productExists(id = null, name){
         if(!name) return;
 
@@ -71,24 +71,28 @@ class Produtos{
         }
     }
 
+    //Buscar por ID
     static async buscarPorId(id){
         return await db.get(
             `SELECT * FROM products WHERE id = ?`, [id]
         );
     }
 
-    static async buscarPorProdutos(){
-        return await db.get(
+    //Lista todos os produtos
+    static async buscarProdutos(){
+        return await db.all(
             `SELECT * FROM products ORDER BY id DESC`
         );
     }
 
+    //Exclui produto
     static async delete(id){
         return await db.run(
             `DELETE FROM products WHERE id = ?`, [id]
         );
     }
 
+    //Validação dos campos
     valida(){
         this.cleanUp();
         if(!this.body.name){
@@ -102,6 +106,7 @@ class Produtos{
         }
     }
 
+    //Sanitização
     cleanUp(){
         for(let key in this.body){
             if(typeof this.body[key] !== 'string'){
