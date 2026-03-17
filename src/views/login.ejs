@@ -5,10 +5,12 @@
             <div class="row justify-content-center">
                 <div class="col-lg8 my-3"></div>
                 <div class="row">
+                    <h1>Faça login ou cadastre-se:</h1>
+                    <%-include('./includes/messages') %>
                     <div class="col-md-6">
-                        <h4>Faça seu cadastro:</h4>
+                        <h5>Cadastro:</h5>
                         <p>Se ainda não possui uma conta, cadastre-se.</p>
-                        <form>
+                        <form method="post" action="/login/register">
                             <div class="mb-3">
                                 <label class="form-label">E-mail</label>
                                 <input type="email" class="form-control" name="email">
@@ -25,14 +27,9 @@
 
 
                     <div class="col-md-6">
-                        <h4>Faça seu Login:</h4>
+                        <h5>Login:</h5>
                         <p>Se possui uma conta, faça login.</p>
-                        <% if(erroMsg.length > 0)  { %>
-                            <div class="alert alert-danger">
-                                <%= erroMsg[0] %>
-                            </div>
-                        <% } %>
-                        <form method="post" action="/login/index">
+                        <form method="post" action="/login/login">
                             <div class="mb-3">
                                 <label class="form-label">E-mail</label>
                                 <input type="email" class="form-control" name="email">
