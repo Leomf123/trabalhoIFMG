@@ -50,6 +50,26 @@
                                    placeholder="0.00">
                         </div>
 
+                        <!-- NOVO: Campo de Categoria -->
+                        <div class="mb-3">
+                            <label for="categoria" class="form-label">Categoria *</label>
+                            <select class="form-select" id="categoria" name="categoria" required>
+                                <option value="">Selecione uma categoria</option>
+                                <% categorias.forEach(categoria => { %>
+                                    <option value="<%= categoria %>"><%= categoria %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+
+                        <!-- Preview da categoria selecionada (opcional) -->
+                        <div class="mb-3" id="categoriaPreview" style="display: none;">
+                            <label class="form-label">Preview da Categoria:</label>
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-tag-fill me-2"></i>
+                                <span id="categoriaSelecionada"></span>
+                            </div>
+                        </div>
+
                         <div class="d-flex gap-2 justify-content-end">
                             <a href="/meus-produtos" class="btn btn-secondary">Cancelar</a>
                             <button type="submit" class="btn btn-primary">
@@ -62,6 +82,20 @@
         </div>
     </div>
 </div>
+
+<!-- Script para preview da categoria -->
+<script>
+document.getElementById('categoria').addEventListener('change', function() {
+    const preview = document.getElementById('categoriaPreview');
+    const span = document.getElementById('categoriaSelecionada');
+    if (this.value) {
+        span.textContent = this.value;
+        preview.style.display = 'block';
+    } else {
+        preview.style.display = 'none';
+    }
+});
+</script>
 
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">

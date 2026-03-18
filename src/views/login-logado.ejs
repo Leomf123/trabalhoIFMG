@@ -1,8 +1,84 @@
-<%-include('./includes/head') %>
-<%-include('./includes/nav1') %>
+<%- include('./includes/head') %>
+<%- include('./includes/nav1') %>
 
-<div class="container">
-       <h1>Você já está logado!</h1>
+<div class="container py-5">
+    <!-- Mensagens Flash -->
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= success %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <% } %>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Card de Boas-vindas -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center py-5">
+                    <i class="bi bi-person-circle" style="font-size: 4rem; color: #007bff;"></i>
+                    <h2 class="mt-3">Bem-vindo, <%= usuario.nome || 'Usuário' %>!</h2>
+                    <p class="text-muted">Você está logado no sistema. O que deseja fazer hoje?</p>
+                </div>
+            </div>
+
+            <!-- Cards de Opções -->
+            <div class="row">
+                <!-- Card Perfil -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-person-badge" style="font-size: 3rem; color: #28a745;"></i>
+                            <h4 class="mt-3">Meu Perfil</h4>
+                            <p class="text-muted">Visualize e edite suas informações pessoais</p>
+                            <a href="/usuario/perfil" class="btn btn-success">
+                                <i class="bi bi-arrow-right-circle"></i> Acessar Perfil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Produtos -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-box-seam" style="font-size: 3rem; color: #007bff;"></i>
+                            <h4 class="mt-3">Meus Produtos</h4>
+                            <p class="text-muted">Gerencie todos os seus produtos cadastrados</p>
+                            <a href="/meus-produtos" class="btn btn-primary">
+                                <i class="bi bi-arrow-right-circle"></i> Acessar Produtos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Adicionar Produto (opcional - pode ficar só na página de produtos) -->
+                <div class="col-md-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-plus-circle" style="font-size: 2rem; color: #ffc107;"></i>
+                            <h5 class="mt-2">Quer anunciar algo novo?</h5>
+                            <a href="/produtos/adicionar" class="btn btn-warning">
+                                <i class="bi bi-plus"></i> Adicionar Novo Produto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informações da Sessão (opcional - para debug) -->
+            <div class="card mt-4 bg-light">
+                <div class="card-body">
+                    <h6 class="text-muted mb-3">Informações da sua conta:</h6>
+                    <p class="mb-1"><strong>ID:</strong> <%= usuario.id %></p>
+                    <p class="mb-1"><strong>Email:</strong> <%= usuario.email %></p>
+                    <p class="mb-1"><strong>Nome:</strong> <%= usuario.nome || 'Não informado' %></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<%-include('./includes/footer') %>
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<%- include('./includes/footer') %>

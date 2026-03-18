@@ -1,46 +1,131 @@
-<%-include('./includes/head') %>
-<%-include('./includes/nav1') %>
+<%- include('./includes/head') %>
+<%- include('./includes/nav1') %>
 
-<div class="container">
-       <div class="row">
-              <div class="col-lg-2"></div>
-              <div class="col-lg-8">
-                     <h1 class="text-center">Seu Markplace</h1>
-                     <p class="text-center lead">Lojas Cadastradas:</p>
-
-                     <div class="responsive-table">
-                            <table class="table my-3">
-                                   <tr>
-                                          <td>Nome</td>
-                                          <td>Sobrenome</td>
-                                          <td>Email</td>
-                                          <td>Telefone</td>
-                                          <td></td>
-                                   </tr>
-                                   <tr>
-                                          <td>Nome</td>
-                                          <td>Sobrenome</td>
-                                          <td>Email</td>
-                                          <td>Telefone</td>
-                                          <td></td>
-                                   </tr>
-                                   <tr>
-                                          <td>Nome</td>
-                                          <td>Sobrenome</td>
-                                          <td>Email</td>
-                                          <td>Telefone</td>
-                                          <td></td>
-                                   </tr>
-
-                            </table>
-                     </div>
-
-
-
-
-              </div>
-              <div class="col-lg-2"></div>
-       </div>
+<!-- Hero Section -->
+<div class="bg-primary text-white py-5 mb-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">Marketplace</h1>
+        <p class="lead">Encontre os melhores produtos dos nossos parceiros</p>
+        
+        <!-- Barra de busca grande -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-lg" placeholder="O que você está procurando?">
+                    <button class="btn btn-light btn-lg" type="button">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<%-include('./includes/footer') %>
+<div class="container">
+    <!-- Seção de Categorias -->
+    <section class="mb-5">
+        <h2 class="text-center mb-4">Categorias</h2>
+        <div class="row g-4">
+            <% categorias.forEach(categoria => { %>
+                <div class="col-md-2-4 col-sm-6 col-12">
+                    <div class="card h-100 shadow-sm text-center categoria-card">
+                        <!-- Imagem da categoria (substitua por imagens reais) -->
+                        <div class="card-img-top bg-light py-4">
+                            <i class="bi <%= categoria.icon %>" style="font-size: 3rem; color: #007bff;"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><%= categoria.nome %></h5>
+                            <a href="/categoria/<%= categoria.nome.toLowerCase().replace(/\s+/g, '-') %>" 
+                               class="btn btn-outline-primary btn-sm">Ver Produtos</a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </section>
+
+    <!-- Produtos por Categoria -->
+    <% categorias.forEach(categoria => { %>
+        <% if (produtosPorCategoria[categoria.nome] && produtosPorCategoria[categoria.nome].length > 0) { %>
+            <section class="mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3><i class="bi <%= categoria.icon %> me-2"></i><%= categoria.nome %></h3>
+                    <a href="/categoria/<%= categoria.nome.toLowerCase().replace(/\s+/g, '-') %>" 
+                       class="btn btn-link">Ver todos <i class="bi bi-arrow-right"></i></a>
+                </div>
+                
+                <div class="row g-4">
+                    <% produtosPorCategoria[categoria.nome].forEach(produto => { %>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="card h-100 shadow-sm produto-card">
+                                <!-- Imagem do produto (placeholder) -->
+                                <div class="card-img-top bg-light text-center py-4">
+                                    <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= produto.nome %></h5>
+                                    <p class="card-text text-muted small"><%= produto.descricao.substring(0, 60) %>...</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="h5 text-primary mb-0">R$ <%= produto.preco.toFixed(2) %></span>
+                                        <small class="text-muted">por <%= produto.usuario_nome || 'Vendedor' %></small>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent border-top-0">
+                                    <button class="btn btn-primary w-100">
+                                        <i class="bi bi-cart-plus"></i> Ver detalhes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+        <% } %>
+    <% }) %>
+
+    <!-- Se não houver produtos -->
+    <% if (todosProdutos.length === 0) { %>
+        <div class="alert alert-info text-center py-5 my-5">
+            <i class="bi bi-box" style="font-size: 3rem;"></i>
+            <h4 class="mt-3">Nenhum produto cadastrado ainda</h4>
+            <p>Seja o primeiro a anunciar um produto!</p>
+            <% if (usuario) { %>
+                <a href="/produtos/adicionar" class="btn btn-primary mt-2">
+                    Anunciar Produto
+                </a>
+            <% } else { %>
+                <a href="/login/index" class="btn btn-primary mt-2">
+                    Fazer Login para Anunciar
+                </a>
+            <% } %>
+        </div>
+    <% } %>
+</div>
+
+<!-- CSS customizado -->
+<style>
+    .col-md-2-4 {
+        flex: 0 0 auto;
+        width: 20%;
+    }
+    @media (max-width: 768px) {
+        .col-md-2-4 {
+            width: 50%;
+        }
+    }
+    .categoria-card {
+        transition: transform 0.3s;
+        cursor: pointer;
+    }
+    .categoria-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .produto-card {
+        transition: transform 0.3s;
+    }
+    .produto-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+    }
+</style>
+
+<%- include('./includes/footer') %>

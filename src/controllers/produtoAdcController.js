@@ -1,6 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 
+// Lista de categorias disponíveis
+const categorias = [
+    'Café da manhã',
+    'Doces',
+    'Salgados',
+    'Bebidas',
+    'Descartáveis'
+];
+
 // Renderizar formulário de adição de produto
 exports.renderAddForm = (req, res) => {
     try {
@@ -12,6 +21,7 @@ exports.renderAddForm = (req, res) => {
 
         res.render('adicionar-produto', { 
             usuario: req.session.user,
+            categorias: categorias, // Passando categorias para a view
             errors: req.flash('errors'),
             success: req.flash('success')
         });
@@ -30,16 +40,22 @@ exports.addProduto = (req, res) => {
             return res.redirect('/login/index');
         }
 
-        const { nome, descricao, preco } = req.body;
+        const { nome, descricao, preco, categoria } = req.body;
 
         // Validações básicas
-        if (!nome || !descricao || !preco) {
+        if (!nome || !descricao || !preco || !categoria) {
             req.flash('errors', 'Todos os campos são obrigatórios');
             return res.redirect('/produtos/adicionar');
         }
 
         if (isNaN(preco) || preco <= 0) {
             req.flash('errors', 'Preço deve ser um número válido maior que zero');
+            return res.redirect('/produtos/adicionar');
+        }
+
+        // Validar se categoria é válida
+        if (!categorias.includes(categoria)) {
+            req.flash('errors', 'Categoria inválida');
             return res.redirect('/produtos/adicionar');
         }
 
@@ -51,19 +67,34 @@ exports.addProduto = (req, res) => {
             nome: nome.trim(),
             descricao: descricao.trim(),
             preco: parseFloat(preco),
+            categoria: categoria,
+            imagem: `/img/categorias/${categoria.toLowerCase().replace(/\s+/g, '-')}.jpg`, // Caminho da imagem
             usuario_id: req.session.user.id,
+            usuario_nome: req.session.user.nome || 'Usuário',
             data_criacao: new Date().toISOString()
         };
 
         // TODO: Salvar no banco de dados quando estiver pronto
-        // Por enquanto, salva em um arquivo JSON para testes
-        const filePath = path.join(__dirname, '..', '..', 'novo_produto.json');
         
-        // Em produção, você adicionaria ao banco de dados
-        // Aqui estamos apenas simulando salvando em arquivo
+        // Salvar em arquivo JSON acumulativo
+        const produtosFilePath = path.join(__dirname, '..', '..', 'produtos.json');
+        
+        let produtos = [];
+        
+        // Verificar se o arquivo já existe
+        if (fs.existsSync(produtosFilePath)) {
+            // Ler produtos existentes
+            const produtosData = fs.readFileSync(produtosFilePath, 'utf8');
+            produtos = JSON.parse(produtosData);
+        }
+        
+        // Adicionar novo produto à lista
+        produtos.push(novoProduto);
+        
+        // Salvar lista atualizada no arquivo
         fs.writeFileSync(
-            filePath,
-            JSON.stringify(novoProduto, null, 2),
+            produtosFilePath,
+            JSON.stringify(produtos, null, 2),
             'utf8'
         );
 
@@ -78,3 +109,6 @@ exports.addProduto = (req, res) => {
         return res.redirect('/produtos/adicionar');
     }
 };
+
+// Exportar categorias para uso em outros controllers
+exports.getCategorias = () => categorias;

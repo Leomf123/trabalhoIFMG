@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1773868731490,
+    "nome": "Brownie da Denise",
+    "descricao": "Hummmm que delicia!",
+    "preco": 10,
+    "categoria": "Doces",
+    "imagem": "/img/categorias/doces.jpg",
+    "usuario_id": 1,
+    "usuario_nome": "Usuário",
+    "data_criacao": "2026-03-18T21:18:51.490Z"
+  },
+  {
+    "id": 1773868757788,
+    "nome": "Cafezinho",
+    "descricao": "cafeeee",
+    "preco": 10,
+    "categoria": "Café da manhã",
+    "imagem": "/img/categorias/café-da-manhã.jpg",
+    "usuario_id": 1,
+    "usuario_nome": "Usuário",
+    "data_criacao": "2026-03-18T21:19:17.788Z"
+  }
+]

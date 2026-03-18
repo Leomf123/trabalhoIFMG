@@ -2,13 +2,69 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="/">Marketplace</a>
 
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="/login/index">Portal Parceiro</a>
+          <a class="nav-link" href="/">Home</a>
         </li>
-      </ul>
-    </div>
 
+        <% if (typeof usuario !== 'undefined' && usuario) { %>
+          <!-- Links para usuários logados -->
+          <li class="nav-item">
+            <a class="nav-link" href="/usuario/perfil">
+              <i class="bi bi-person"></i> Meu Perfil
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/meus-produtos">
+              <i class="bi bi-box"></i> Meus Produtos
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/produtos/adicionar">
+              <i class="bi bi-plus-circle"></i> Anunciar Produto
+            </a>
+          </li>
+          <!-- OPÇÃO DE LOGOUT - bem visível -->
+          <li class="nav-item">
+            <a class="nav-link text-warning fw-bold" href="/login/logout">
+              <i class="bi bi-box-arrow-right"></i> Sair
+            </a>
+          </li>
+        <% } else { %>
+          <!-- Links para visitantes (não logados) -->
+          <li class="nav-item">
+            <a class="nav-link" href="/login/index">
+              <i class="bi bi-person-plus"></i> Portal Parceiro
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login/index">
+              <i class="bi bi-key"></i> Entrar / Cadastrar
+            </a>
+          </li>
+        <% } %>
+      </ul>
+
+      <!-- Informação do usuário logado (opcional) -->
+      <% if (typeof usuario !== 'undefined' && usuario) { %>
+        <span class="navbar-text text-white me-3">
+          <i class="bi bi-person-circle"></i> Olá, <%= usuario.nome || 'Usuário' %>
+        </span>
+      <% } %>
+
+      <!-- Barra de busca -->
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Buscar produtos..." aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">Buscar</button>
+      </form>
+    </div>
   </div>
 </nav>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">

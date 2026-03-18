@@ -3,7 +3,10 @@ const Usuario = require('../models/UsuariosModel');
 //Por get
 exports.index = (req, res) => {
     if(req.session.user){
-        return res.render('login-logado');
+        // Passa os dados do usuário para a view
+        return res.render('login-logado', { 
+            usuario: req.session.user 
+        });
     }
     res.render('login');
 }
@@ -21,7 +24,6 @@ exports.logout = (req, res) => {
 
 //Por post
 exports.register = async (req, res) => {
-
     try{
         const usuario = new Usuario(req.body);
         await usuario.register();
@@ -45,10 +47,7 @@ exports.register = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
-
     try{
-        //Aqui que eu vou buscar no banco de dados pelo email e senha do body
-        //e se encontrar retorno o do banco de dados pra associar com os da sessão
         const usuario = new Usuario(req.body);
         await usuario.login();
 
@@ -58,6 +57,7 @@ exports.login = async (req, res) => {
                 res.redirect('/login/index');
             });
         }
+        
         //regenerar a sessão para evitar session fixation
         req.session.regenerate(err => {
             if(err){
@@ -67,7 +67,8 @@ exports.login = async (req, res) => {
 
             req.session.user = {
                 id: usuario.user.id,
-                email: usuario.user.email
+                email: usuario.user.email,
+                nome: usuario.user.nome || 'Usuário' // Adicionando nome se existir
             }
             req.flash('success', 'Login realizado com sucesso!');
             return req.session.save(() => {
