@@ -4,8 +4,11 @@ const router = express.Router();
 const homeController = require('./src/controllers/homeController');
 const loginController = require('./src/controllers/loginController');
 const perfilController = require('./src/controllers/perfilController');
-// wharley - importando o controller
 const produtoController = require('./src/controllers/produtoController');
+const produtoListController = require('./src/controllers/produtoListController');
+// NOVOS: Importando os controllers de adicionar e deletar produtos
+const produtoAdcController = require('./src/controllers/produtoAdcController');
+const produtoDeleteController = require('./src/controllers/produtoDeleteController');
 
 //Rotas Home
 router.get('/', homeController.index);
@@ -19,10 +22,22 @@ router.post('/login/register', loginController.register);
 //Rotas Perfil Usuário
 router.get('/usuario/perfil', perfilController.index);
 
-// Wharley - Rota para página de edição
-// O ":id" é um parâmetro dinâmico na URL (ex: /produtos/editar/1)
+// Rotas de Produtos
+// Listar produtos do usuário logado
+router.get('/meus-produtos', produtoListController.index);
+
+// Adicionar novo produto
+router.get('/produtos/adicionar', produtoAdcController.renderAddForm);
+router.post('/produtos/adicionar', produtoAdcController.addProduto);
+
+// Editar produto (já existente)
 router.get('/produtos/editar/:id', produtoController.renderEditForm);
-// Rota para salvar alterações de teste no arquivo
 router.post('/produtos/editar/:id', produtoController.updateProdutoTeste);
+
+// Deletar produto
+router.post('/produtos/deletar/:id', produtoDeleteController.deleteProduto);
+
+// Rota para listar produtos de um usuário específico (para perfil público)
+router.get('/usuario/:id/produtos', produtoListController.listarPorUsuarioId);
 
 module.exports = router;
