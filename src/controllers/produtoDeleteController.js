@@ -1,7 +1,7 @@
-// Deletar produto
-exports.deleteProduto = (req, res) => {
+const db = require('../database/connection');
+
+exports.deleteProduto = async (req, res) => {
     try {
-        // Verificar se usuário está logado
         if (!req.session.user) {
             req.flash('errors', 'Você precisa estar logado para deletar produtos');
             return res.redirect('/login/index');
@@ -9,17 +9,23 @@ exports.deleteProduto = (req, res) => {
 
         const produtoId = req.params.id;
 
-        // TODO: Deletar do banco de dados quando estiver pronto
-        // Aqui você faria: await db.run('DELETE FROM produtos WHERE id = ? AND usuario_id = ?', [produtoId, req.session.user.id]);
+        const produto = await db.get(
+            'SELECT * FROM products WHERE id = ? AND usuario_id = ?',
+            [produtoId, req.session.user.id]
+        );
 
-        console.log(`Produto ${produtoId} deletado pelo usuário ${req.session.user.id}`);
+        if (!produto) {
+            req.flash('errors', 'Produto não encontrado');
+            return res.redirect('/meus-produtos');
+        }
 
-        // Simular verificação de propriedade do produto
-        // Em produção, você verificaria se o produto pertence ao usuário antes de deletar
+        await db.run(
+            'DELETE FROM products WHERE id = ? AND usuario_id = ?',
+            [produtoId, req.session.user.id]
+        );
 
         req.flash('success', 'Produto deletado com sucesso!');
         return res.redirect('/meus-produtos');
-
     } catch (error) {
         console.error("Erro ao deletar produto:", error);
         req.flash('errors', 'Erro ao deletar produto');
@@ -27,28 +33,28 @@ exports.deleteProduto = (req, res) => {
     }
 };
 
-// Rota para confirmar deleção (opcional - pode ser usado para página de confirmação)
-exports.confirmDelete = (req, res) => {
+exports.confirmDelete = async (req, res) => {
     try {
         if (!req.session.user) {
             return res.redirect('/login/index');
         }
 
         const produtoId = req.params.id;
-        
-        // TODO: Buscar produto do banco de dados
-        const produtoFake = {
-            id: produtoId,
-            nome: "Brownie de Exemplo",
-            descricao: "Descrição do produto",
-            preco: 10.00
-        };
 
-        res.render('confirmar-delecao', { 
-            produto: produtoFake,
+        const produto = await db.get(
+            'SELECT * FROM products WHERE id = ? AND usuario_id = ?',
+            [produtoId, req.session.user.id]
+        );
+
+        if (!produto) {
+            req.flash('errors', 'Produto não encontrado');
+            return res.redirect('/meus-produtos');
+        }
+
+        res.render('confirmar-delecao', {
+            produto: produto,
             usuario: req.session.user
         });
-
     } catch (error) {
         console.error("Erro ao carregar confirmação:", error);
         res.redirect('/meus-produtos');

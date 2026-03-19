@@ -1,7 +1,7 @@
-// Listar produtos do usuário logado
+const db = require('../database/connection');
+
 exports.index = async (req, res) => {
     try {
-        // Verificar se usuário está logado
         if (!req.session.user) {
             req.flash('errors', 'Você precisa estar logado para acessar seus produtos');
             return res.redirect('/login/index');
@@ -9,43 +9,20 @@ exports.index = async (req, res) => {
 
         const usuarioId = req.session.user.id;
 
-        // TODO: Buscar produtos do banco de dados quando estiver pronto
-        // Por enquanto, usando produtos fictícios para teste
-        const produtosFake = [
-            {
-                id: 1,
-                nome: "Brownie de Doce de Leite",
-                descricao: "Brownie recheado com doce de leite artesanal.",
-                preco: 12.50,
-                usuario_id: usuarioId
-            },
-            {
-                id: 2,
-                nome: "Brownie de Nutella",
-                descricao: "Brownie com generosa camada de Nutella.",
-                preco: 14.00,
-                usuario_id: usuarioId
-            },
-            {
-                id: 3,
-                nome: "Brownie Tradicional",
-                descricao: "Brownie clássico com pedaços de chocolate meio amargo.",
-                preco: 10.00,
-                usuario_id: usuarioId
-            }
-        ];
+        const produtos = await db.all(
+            `SELECT * FROM products WHERE usuario_id = ? ORDER BY id DESC`,
+            [usuarioId]
+        );
 
-        // Flash messages para feedback
         const success = req.flash('success');
         const errors = req.flash('errors');
 
-        res.render('meus-produtos', { 
-            produtos: produtosFake,
+        res.render('meus-produtos', {
+            produtos: produtos || [],
             usuario: req.session.user,
             success: success.length > 0 ? success : null,
             errors: errors.length > 0 ? errors : null
         });
-
     } catch (error) {
         console.error("Erro ao listar produtos:", error);
         req.flash('errors', 'Erro ao carregar produtos');
@@ -53,34 +30,23 @@ exports.index = async (req, res) => {
     }
 };
 
-// Listar produtos de um usuário específico (para perfil público)
 exports.listarPorUsuarioId = async (req, res) => {
     try {
         const usuarioId = req.params.id;
 
-        // TODO: Buscar produtos do banco de dados quando estiver pronto
-        const produtosFake = [
-            {
-                id: 1,
-                nome: "Brownie de Doce de Leite",
-                descricao: "Brownie recheado com doce de leite artesanal.",
-                preco: 12.50,
-                usuario_id: usuarioId
-            },
-            {
-                id: 2,
-                nome: "Brownie de Nutella",
-                descricao: "Brownie com generosa camada de Nutella.",
-                preco: 14.00,
-                usuario_id: usuarioId
-            }
-        ];
+        const produtos = await db.all(
+            `SELECT p.*, u.email as usuario_email 
+             FROM products p 
+             JOIN usuarios u ON p.usuario_id = u.id 
+             WHERE p.usuario_id = ? 
+             ORDER BY p.id DESC`,
+            [usuarioId]
+        );
 
-        res.render('produtos-usuario', { 
-            produtos: produtosFake,
+        res.render('produtos-usuario', {
+            produtos: produtos || [],
             usuarioId: usuarioId
         });
-
     } catch (error) {
         console.error("Erro ao listar produtos do usuário:", error);
         res.status(500).send("Erro ao carregar produtos");

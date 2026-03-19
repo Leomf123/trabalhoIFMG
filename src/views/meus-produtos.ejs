@@ -4,88 +4,172 @@
 <div class="container py-4">
     <div class="row">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>Meus Produtos</h1>
-                <a href="/produtos/adicionar" class="btn btn-success">
-                    <i class="bi bi-plus-circle"></i> Adicionar Novo Produto
-                </a>
+            <!-- Header com saudação e estatísticas rápidas -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+                <div>
+                    <h1 class="display-5 fw-bold">
+                        <i class="bi bi-box-seam text-primary"></i> Meus Produtos
+                    </h1>
+                    <p class="text-muted lead">
+                        <i class="bi bi-person-circle"></i> Olá, <strong><%= user.email.split('@')[0] %></strong>! 
+                        Gerencie seu catálogo de produtos.
+                    </p>
+                </div>
+                <div>
+                    <a href="/produtos/adicionar" class="btn btn-success btn-lg shadow-sm">
+                        <i class="bi bi-plus-circle"></i> <span class="d-none d-md-inline">Novo Produto</span>
+                        <span class="d-md-none">Adicionar</span>
+                    </a>
+                </div>
             </div>
 
             <!-- Mensagens Flash -->
             <% if (typeof success !== 'undefined' && success) { %>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <%= success %>
+                <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i> <%= success %>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             <% } %>
 
             <% if (typeof errors !== 'undefined' && errors) { %>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <%= errors %>
+                <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> <%= errors %>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <% } %>
+
+            <!-- Cards de Estatísticas (apenas se houver produtos) -->
+            <% if (produtos && produtos.length > 0) { %>
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-md-4">
+                        <div class="card bg-primary text-white shadow-sm border-0">
+                            <div class="card-body text-center">
+                                <i class="bi bi-box fs-1"></i>
+                                <h3 class="mb-0"><%= produtos.length %></h3>
+                                <p class="mb-0 small">Total de Produtos</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="card bg-success text-white shadow-sm border-0">
+                            <div class="card-body text-center">
+                                <i class="bi bi-tags fs-1"></i>
+                                <h3 class="mb-0">
+                                    <% 
+                                        let categorias = new Set();
+                                        produtos.forEach(p => { if(p.categoria) categorias.add(p.categoria); });
+                                    %>
+                                    <%= categorias.size %>
+                                </h3>
+                                <p class="mb-0 small">Categorias</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="card bg-info text-white shadow-sm border-0">
+                            <div class="card-body text-center">
+                                <i class="bi bi-currency-dollar fs-1"></i>
+                                <h3 class="mb-0">
+                                    <% 
+                                        let total = 0;
+                                        produtos.forEach(p => { total += Number(p.price); });
+                                    %>
+                                    R$ <%= total.toFixed(2) %>
+                                </h3>
+                                <p class="mb-0 small">Valor Total</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <% } %>
 
             <!-- Lista de Produtos -->
             <% if (produtos && produtos.length > 0) { %>
-                <div class="row">
+                <!-- Grid de Produtos Responsivo -->
+                <div class="row g-4">
                     <% produtos.forEach(produto => { %>
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow-sm">
+                        <div class="col-sm-6 col-lg-4 col-xl-3">
+                            <div class="card h-100 shadow-sm hover-card border-0">
+                                <!-- Imagem placeholder (opcional) -->
+                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 140px;">
+                                    <i class="bi bi-image text-secondary" style="font-size: 3rem;"></i>
+                                </div>
+                                
                                 <div class="card-body">
-                                    <h5 class="card-title"><%= produto.nome %></h5>
-                                    <p class="card-text text-muted"><%= produto.descricao %></p>
-                                    <p class="card-text">
-                                        <strong>Preço:</strong> R$ <%= produto.preco.toFixed(2) %>
-                                    </p>
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title fw-bold mb-0 text-truncate" style="max-width: 150px;">
+                                            <%= produto.name %>
+                                        </h5>
+                                        <span class="badge bg-primary rounded-pill">
+                                            <%= produto.categoria || 'Geral' %>
+                                        </span>
+                                    </div>
+                                    
+                                    <% if (produto.data_criacao) { %>
+                                        <p class="card-text text-muted small mb-2">
+                                            <i class="bi bi-calendar3"></i> 
+                                            <%= new Date(produto.data_criacao).toLocaleDateString('pt-BR') %>
+                                        </p>
+                                    <% } %>
+                                    
+                                    <p class="card-text text-truncate"><%= produto.description %></p>
+                                    
+                                    <h4 class="text-success fw-bold mb-0">
+                                        R$ <%= Number(produto.price).toFixed(2) %>
+                                    </h4>
                                 </div>
-                                <div class="card-footer bg-transparent border-top-0">
-                                    <div class="btn-group w-100" role="group">
+                                
+                                <div class="card-footer bg-transparent border-0 pt-0">
+                                    <div class="d-flex gap-2">
                                         <a href="/produtos/editar/<%= produto.id %>" 
-                                           class="btn btn-outline-primary btn-sm">
-                                            <i class="bi bi-pencil"></i> Editar
+                                           class="btn btn-outline-primary flex-grow-1">
+                                            <i class="bi bi-pencil"></i> 
+                                            <span class="d-none d-sm-inline">Editar</span>
                                         </a>
-                                        <button type="button" 
-                                                class="btn btn-outline-danger btn-sm" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#deleteModal<%= produto.id %>">
-                                            <i class="bi bi-trash"></i> Deletar
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Modal de Confirmação de Deleção -->
-                        <div class="modal fade" id="deleteModal<%= produto.id %>" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Confirmar Deleção</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Tem certeza que deseja deletar o produto <strong>"<%= produto.nome %>"</strong>?</p>
-                                        <p class="text-danger"><small>Esta ação não pode ser desfeita.</small></p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <form action="/produtos/deletar/<%= produto.id %>" method="POST" style="display: inline;">
-                                            <button type="submit" class="btn btn-danger">Sim, deletar</button>
-                                        </form>
+                                        <a href="/produtos/deletar/<%= produto.id %>" 
+                                           class="btn btn-outline-danger flex-grow-1">
+                                            <i class="bi bi-trash"></i> 
+                                            <span class="d-none d-sm-inline">Deletar</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     <% }) %>
                 </div>
+
+                <!-- Rodapé da lista -->
+                <div class="text-center text-muted mt-4">
+                    <small><i class="bi bi-info-circle"></i> Total de <%= produtos.length %> produto(s) cadastrado(s)</small>
+                </div>
             <% } else { %>
-                <div class="alert alert-info text-center py-5">
-                    <i class="bi bi-box" style="font-size: 3rem;"></i>
-                    <h4 class="mt-3">Você ainda não possui produtos cadastrados</h4>
-                    <p>Comece adicionando seu primeiro produto!</p>
-                    <a href="/produtos/adicionar" class="btn btn-primary mt-2">
-                        Adicionar Produto
+                <!-- Estado vazio com design melhorado -->
+                <div class="text-center py-5 my-5">
+                    <div class="mb-4">
+                        <i class="bi bi-box" style="font-size: 6rem; color: #dee2e6;"></i>
+                    </div>
+                    <h2 class="fw-light mb-3">Seu catálogo está vazio</h2>
+                    <p class="text-muted lead mb-4">Comece agora mesmo a vender seus produtos!</p>
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="bi bi-lightbulb text-warning"></i>
+                                        Dica Rápida
+                                    </h5>
+                                    <p class="card-text small">
+                                        Adicione produtos com fotos, descrições detalhadas e preços competitivos 
+                                        para atrair mais clientes!
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="/produtos/adicionar" class="btn btn-primary btn-lg px-5 mt-4 shadow-sm">
+                        <i class="bi bi-plus-circle"></i> Adicionar Primeiro Produto
                     </a>
                 </div>
             <% } %>
@@ -93,7 +177,68 @@
     </div>
 </div>
 
-<!-- Bootstrap Icons (opcional, para ícones) -->
+<!-- CSS customizado melhorado -->
+<style>
+    .hover-card {
+        transition: all 0.3s ease;
+        border: none;
+    }
+    .hover-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+    }
+    
+    .card-img-top {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .badge {
+        font-weight: 500;
+        padding: 6px 12px;
+    }
+    
+    .btn-group .btn {
+        border-radius: 8px !important;
+        padding: 8px 16px;
+    }
+    
+    /* Animações suaves */
+    .alert {
+        animation: slideDown 0.5s ease;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Estatísticas cards */
+    .card.text-white {
+        transition: transform 0.2s;
+    }
+    .card.text-white:hover {
+        transform: scale(1.02);
+    }
+    
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .display-5 {
+            font-size: 1.8rem;
+        }
+        .lead {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <%- include('./includes/footer') %>
