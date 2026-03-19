@@ -6,39 +6,41 @@ class Produtos{
         this.errors = []; //armazenar erros que possa acontecer
     }
 
-    // Cadastrar Produtos
-    async register() {
+    async register(){
         this.valida();
-        if (this.errors.length > 0) return;
+        if(this.errors.length > 0) return;
 
         await this.productExists(this.body.name);
-        if (this.errors.length > 0) return;
+        if(this.errors.length > 0) return;
 
+        try{
+            console.log('Entrou no try');
+            const result = await db.run(
+                `INSERT INTO products (
+                name,
+                description,
+                price) VALUES (?, ?, ?)`,
+                [
+                    this.body.name,
+                    this.body.description,
+                    this.body.price
+                ]
+            )
+           
+            return {id: result.id};
 
-        const result = await db.run(
-            `INSERT INTO products (
-                    name,
-                    description,
-                    price) VALUES (?, ?, ?)`,
-            [
-                this.body.name,
-                this.body.description,
-                this.body.price
-            ]
-        );
+        } catch(e){
 
-        //Retorna o ID do produto criado
-        return { id: result.id };
+        }
     }
 
-    // Atualizar/ Editar produto
     async edit(id){
         if(!id) return;
 
         this.valida();
         if(this.errors.length > 0) return;
 
-        await this.productExists(id, this.body.name);
+        await this.productExists(this.body.name, id);
         if(this.errors.length > 0) return;
 
         await db.run(
@@ -55,14 +57,15 @@ class Produtos{
         return await Produtos.buscarPorId(id);
     }
 
-    //Verifica se o produto já existe
-    async productExists(id = null, name){
+    async productExists(name, id = null){
+    
         if(!name) return;
 
         const product = await db.get(`
             SELECT * FROM products WHERE name = ?`,
         [name]
         );
+        console.log(product);
 
         const convertId = id ? Number(id): null;
 
@@ -71,28 +74,24 @@ class Produtos{
         }
     }
 
-    //Buscar por ID
     static async buscarPorId(id){
         return await db.get(
             `SELECT * FROM products WHERE id = ?`, [id]
         );
     }
 
-    //Lista todos os produtos
-    static async buscarProdutos(){
-        return await db.all(
+    static async buscarPorProdutos(){
+        return await db.get(
             `SELECT * FROM products ORDER BY id DESC`
         );
     }
 
-    //Exclui produto
     static async delete(id){
         return await db.run(
             `DELETE FROM products WHERE id = ?`, [id]
         );
     }
 
-    //Validação dos campos
     valida(){
         this.cleanUp();
         if(!this.body.name){
@@ -104,9 +103,9 @@ class Produtos{
         if(!this.body.price){
             this.errors.push('Preço é obrigatório!');
         }
+        //To do: Validar se preço é um número válido
     }
 
-    //Sanitização
     cleanUp(){
         for(let key in this.body){
             if(typeof this.body[key] !== 'string'){
