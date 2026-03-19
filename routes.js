@@ -7,7 +7,6 @@ const perfilController = require('./src/controllers/perfilController');
 const produtoController = require('./src/controllers/produtoController');
 const produtoListController = require('./src/controllers/produtoListController');
 // NOVOS: Importando os controllers de adicionar e deletar produtos
-const produtoAdcController = require('./src/controllers/produtoAdcController');
 const produtoDeleteController = require('./src/controllers/produtoDeleteController');
 
 //Rotas Home
