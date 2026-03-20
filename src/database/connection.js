@@ -15,12 +15,14 @@ function connect(){
     db.run(`
         CREATE TABLE IF NOT EXISTS usuarios(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            nomeLoja TEXT NOT NULL,
+            descricaoLoja TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL
         )
     `);
 
-    //To do: criar tabela produtos
     db.run(`
         CREATE TABLE IF NOT EXISTS products(
             id INTEGER PRIMARY KEY AUTOINCREMENT,

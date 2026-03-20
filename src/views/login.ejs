@@ -12,12 +12,24 @@
                         <p>Se ainda não possui uma conta, cadastre-se.</p>
                         <form method="post" action="/login/register">
                             <div class="mb-3">
-                                <label class="form-label">E-mail</label>
+                                <label class="form-label">Nome:</label>
+                                <input type="text" class="form-control" name="nome">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nome da Loja:</label>
+                                <input type="text" class="form-control" name="nomeLoja">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Breve descrição da loja:</label>
+                                <input type="text" class="form-control" name="descricaoLoja">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">E-mail:</label>
                                 <input type="email" class="form-control" name="email">
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Senha</label>
+                                <label class="form-label">Senha:</label>
                                 <input type="password" class="form-control" name="password">
                             </div>
 
@@ -39,7 +51,7 @@
                                 <label class="form-label">Senha</label>
                                 <input type="password" class="form-control" name="password">
                             </div>
-
+                            
                             <button type="submit" class="btn btn-primary">Entrar</button>
                         </form>
                     </div>

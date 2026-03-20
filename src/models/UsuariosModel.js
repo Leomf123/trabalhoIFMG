@@ -21,20 +21,24 @@ class Usuario {
             const hash = await bcrypt.hash(this.body.password, salt);
             /*
                     nome,
-                    sobrenome,
                     nome da empresa,
-                    categoria,
                     breve descrição da empresa,
-                    chave pix?,
                     email,
-                    telefone,
                     senha
-
+            
             */
             const result = await db.run(
-                `INSERT INTO usuarios (email, password)
-                VALUES (?,?)`,
+                `INSERT INTO usuarios (
+                nome,
+                nomeLoja,
+                descricaoLoja, 
+                email,
+                password)
+                VALUES (?, ?, ?, ?, ?)`,
                 [
+                    this.body.nome,
+                    this.body.nomeLoja,
+                    this.body.descricaoLoja,
                     this.body.email,
                     hash
                 ]
@@ -167,7 +171,10 @@ class Usuario {
             }
         };
 
-        this.body = {
+        this.body = { 
+            nome: this.body.nome || '',
+            nomeLoja: this.body.nomeLoja || '',
+            descricaoLoja: this.body.descricaoLoja || '',
             email: this.body.email || '',
             password: this.body.password || ''
         };
