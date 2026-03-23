@@ -19,7 +19,9 @@ router.post('/login/login', loginController.login);
 router.post('/login/register', loginController.register);
 
 //Rotas Perfil Usuário
-router.get('/usuario/perfil', perfilController.index);
+router.get('/perfil/index/', perfilController.index);
+router.get('/perfil/index/:id', perfilController.editIndex);
+router.post('/perfil/edit/:id', perfilController.edit);
 
 // Rotas de Produtos
 // Listar produtos do usuário logado

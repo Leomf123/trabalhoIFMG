@@ -1,0 +1,45 @@
+<%- include('includes/head') %>
+  <%- include('includes/nav2') %>
+    <div class="container">
+      <div class="row">
+        <div class="col-log-2"></div>
+
+        <div class="col-log-8 my-3">
+          <h1 class="text-center">Perfil do Usuário:</h1>
+        
+          <p class="text-center lead"> Edite o seu perfil abaixo</p>
+
+          <%- include('includes/messages')%>
+         
+            <form action="/perfil/edit/<%= usuario.id %>" method="POST">
+              
+              <div class="form-group">
+                <label>Nome</label>
+                <input value="<%= usuario.nome %>" type="text" class="form-control my-2" name="nome">
+              </div>
+              <div class="form-group">
+                <label>Nome da Loja:</label>
+                <input value="<%= usuario.nomeLoja %>" type="text" class="form-control my-2" name="sobrenome">
+              </div>
+              <div class="form-group">
+                <label>Descrição da Loja:</label>
+                <input value="<%= usuario.descricaoLoja %>" type="text" class="form-control my-2" name="sobrenome">
+              </div>
+              <div class="form-group">
+                <label>Endereço de E-mail</label>
+                <input value="<%= usuario.email %>" type="email" class="form-control my-2" name="email">
+              </div>
+              <div class="form-group">
+                <label>Senha:</label>
+                <input value="<%= usuario.password %>" type="text" class="form-control my-2" name="sobrenome">
+              </div>
+
+              <button type="submit" class="btn btn-primary my-2">Salvar</button>
+            </form>
+
+        </div>
+        <div class="col-log-2"></div>
+      </div>
+
+    </div>
+<%- include('includes/footer') %>
