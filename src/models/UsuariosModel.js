@@ -99,15 +99,24 @@ class Usuario {
         //await this.userExists();
         if (this.errors.length > 0) return;
 
+        const salt = await bcrypt.genSalt(12);
+        const hash = await bcrypt.hash(this.body.password, salt);
+
         await db.run(
-            `UPDATE usuarios SET email = ?, 
-                password = ?,
-                WHERE id = ?
-                `, [
-            this.body.email,
-            this.body.password,
-            id
-        ]
+            `UPDATE usuarios SET nome = ?,
+                nomeLoja = ?,
+                descricaoLoja = ?, 
+                email = ?,
+                password = ?)
+                WHERE id = ?`,
+                [
+                    this.body.nome,
+                    this.body.nomeLoja,
+                    this.body.descricaoLoja,
+                    this.body.email,
+                    hash,
+                    id
+                ]
         );
         return await Usuario.buscarPorId(id);
     }
