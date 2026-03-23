@@ -10,7 +10,7 @@ class Usuario {
     }
 
     async register() {
-        this.valida();
+        this.validaRegister();
         if (this.errors.length > 0) return;
 
         await this.userExists();
@@ -43,7 +43,6 @@ class Usuario {
                     hash
                 ]
             )
-            console.log(result);
             this.user = {
                 id: result.id,
                 emai: this.body.email,
@@ -59,7 +58,7 @@ class Usuario {
     }
 
     async login() {
-        this.valida();
+        this.validaLogin();
         if (this.errors.length > 0) return;
 
         const user = await db.get(`
@@ -73,8 +72,6 @@ class Usuario {
             return;
         }
 
-        // Transforma as senhas em hash para nnão serem armazanadas
-        //como texto puro na base de dados
         const senhaValida = await bcrypt.compare(
             this.body.password, user.password
         );
@@ -89,40 +86,33 @@ class Usuario {
         }
     }
 
-    ////////////////////////////////
-
     async edit(id) {
         if (!id) return;
 
-        this.valida();
+        this.validaEdit();
         if (this.errors.length > 0) return;
 
-        //await this.userExists();
+        await this.userExistsEdit(this.body.email, id);
         if (this.errors.length > 0) return;
-
-        const salt = await bcrypt.genSalt(12);
-        const hash = await bcrypt.hash(this.body.password, salt);
 
         await db.run(
             `UPDATE usuarios SET nome = ?,
                 nomeLoja = ?,
                 descricaoLoja = ?, 
-                email = ?,
-                password = ?)
+                email = ?
                 WHERE id = ?`,
                 [
                     this.body.nome,
                     this.body.nomeLoja,
                     this.body.descricaoLoja,
                     this.body.email,
-                    hash,
                     id
                 ]
         );
         return await Usuario.buscarPorId(id);
     }
 
-    async userExists2(email, id = null) {
+    async userExistsEdit(email, id = null) {
 
         if (!email) return;
 
@@ -145,12 +135,11 @@ class Usuario {
     }
 
     static async buscarUsuarios() {
-        return await db.get(
+        return await db.all(
             `SELECT * FROM usuarios ORDER BY id DESC`
         );
     }
-    ///////////////////////////////
-
+    
     async userExists() {
         const user = await db.get(
             `SELECT id, email, password FROM 
@@ -160,7 +149,7 @@ class Usuario {
         if (user) this.errors.push('Usuário já existe');
     }
 
-    valida() {
+    validaLogin() {
         this.cleanUp();
 
         if (!this.body.email || !validator.isEmail(this.body.email)) {
@@ -171,6 +160,48 @@ class Usuario {
         }
         if (this.body.password && (this.body.password.length < 6 || this.body.password.length > 50)) {
             this.errors.push('A senha deve ter entre 6 e 50 caracteres!');
+        }
+    }
+
+    validaRegister() {
+        this.cleanUp();
+
+        if (!this.body.nome) {
+            this.errors.push('Nome Obrigatório!');
+        }
+        if (!this.body.nomeLoja) {
+            this.errors.push('Nome da Loja Obrigatório!');
+        }
+        if (!this.body.descricaoLoja) {
+            this.errors.push('Descrição da Loja Obrigatória!');
+        }
+
+        if (!this.body.email || !validator.isEmail(this.body.email)) {
+            this.errors.push('E-mail inválido');
+        }
+        if (!this.body.password) {
+            this.errors.push('Senha obrigatória');
+        }
+        if (this.body.password && (this.body.password.length < 6 || this.body.password.length > 50)) {
+            this.errors.push('A senha deve ter entre 6 e 50 caracteres!');
+        }
+    }
+
+    validaEdit() {
+        this.cleanUp();
+
+        if (!this.body.nome) {
+            this.errors.push('Nome Obrigatório!');
+        }
+        if (!this.body.nomeLoja) {
+            this.errors.push('Nome da Loja Obrigatório!');
+        }
+        if (!this.body.descricaoLoja) {
+            this.errors.push('Descrição da Loja Obrigatória!');
+        }
+
+        if (!this.body.email || !validator.isEmail(this.body.email)) {
+            this.errors.push('E-mail inválido');
         }
     }
 
