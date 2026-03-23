@@ -35,8 +35,7 @@ exports.edit = async function (req, res) {
 
         if (usuario.errors.length > 0) {
             req.flash('errors', usuario.errors);
-            req.session.save(() => res.redirect(`/perfil/index/${id}`));
-            return;
+            return req.session.save(() => res.redirect(`/perfil/index/${id}`));
         }
 
 

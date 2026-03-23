@@ -70,6 +70,7 @@ class Usuario {
 
         if (!user) {
             this.errors.push('Usuário não cadastrado. Cadastre-se!');
+            return;
         }
 
         // Transforma as senhas em hash para nnão serem armazanadas

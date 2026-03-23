@@ -80,8 +80,8 @@ class Produtos{
         );
     }
 
-    static async buscarPorProdutos(){
-        return await db.get(
+    static async buscarProdutos(){
+        return await db.all(
             `SELECT * FROM products ORDER BY id DESC`
         );
     }
