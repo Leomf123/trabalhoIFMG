@@ -185,6 +185,12 @@ class Usuario {
         if (this.body.password && (this.body.password.length < 6 || this.body.password.length > 50)) {
             this.errors.push('A senha deve ter entre 6 e 50 caracteres!');
         }
+        if (!this.body.password2) {
+            this.errors.push('Repetir Senha obrigatório');
+        }
+        if (this.body.password !== this.body.password2) {
+            this.errors.push('As senhas devem ser iguais');
+        }
     }
 
     validaEdit() {
@@ -217,7 +223,8 @@ class Usuario {
             nomeLoja: this.body.nomeLoja || '',
             descricaoLoja: this.body.descricaoLoja || '',
             email: this.body.email || '',
-            password: this.body.password || ''
+            password: this.body.password || '',
+            password2: this.body.password2 || ''
         };
 
     }
