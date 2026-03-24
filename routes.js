@@ -7,10 +7,8 @@ const perfilController = require('./src/controllers/perfilController');
 const produtoListController = require('./src/controllers/produtoListController');
 // NOVOS: Importando os controllers de adicionar e deletar produtos
 const produtoDeleteController = require('./src/controllers/produtoDeleteController');
-// Antonio - cadastra produto
-const productController = require('./src/controllers/productController');
-// wharley - importando o controller
-const produtoControllerWharley = require('./src/controllers/produtoControllerWharley');
+// Controllers Produto
+const produtoController = require('./src/controllers/produtoController');
 
 //Rotas Home
 router.get('/', homeController.index);
@@ -35,14 +33,12 @@ router.post('/produtos/deletar/:id', produtoDeleteController.deleteProduto);
 // Rota para listar produtos de um usuário específico (para perfil público)
 router.get('/usuario/:id/produtos', produtoListController.listarPorUsuarioId);
 
-//antonioCadastrarProduto
-router.get("/create", productController.createForm);
-router.post("/create", productController.create);
+// Cadastrar Produto
+router.get("/create", produtoController.createForm);
+router.post("/create", produtoController.create);
 
-// Wharley - Rota para página de edição fase 01 concluida
-// O ":id" é um parâmetro dinâmico na URL (ex: /produtos/editar/1)
-router.get('/produtos/editar/:id', produtoControllerWharley.renderEditForm);
-// Versão fase 02 Wharley - banco de dados
-router.post('/produtos/editar/:id', produtoControllerWharley.updateProduto);
+// Editar Produto
+router.get('/produtos/editar/:id', produtoController.renderEditForm);
+router.post('/produtos/editar/:id', produtoController.updateProduto);
 
 module.exports = router;
