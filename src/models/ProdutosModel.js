@@ -119,6 +119,12 @@ class Produtos{
 
             name: validator.escape(name.trim()),
     price: parseFloat(price).toFixed(2),
+
+    // validação simples
+        if (!nome || !preco) {
+            req.flash('error', 'Nome e preço são obrigatórios');
+            return res.redirect(`/produtos/editar/${produtoId}`);
+        }
         */
     }
 
