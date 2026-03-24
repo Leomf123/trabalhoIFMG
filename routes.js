@@ -36,4 +36,8 @@ router.post('/produtos/deletar/:id', produtoDeleteController.deleteProduto);
 // Rota para listar produtos de um usuário específico (para perfil público)
 router.get('/usuario/:id/produtos', produtoListController.listarPorUsuarioId);
 
+//antonioCadastrarProduto
+router.get("/create", productController.createForm);
+router.post("/create", productController.create);
+
 module.exports = router;

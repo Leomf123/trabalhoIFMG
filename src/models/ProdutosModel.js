@@ -104,6 +104,24 @@ class Produtos{
             this.errors.push('Preço é obrigatório!');
         }
         //To do: Validar se preço é um número válido
+
+        /*
+        To do: Validações antonio
+        if (!name || !validator.isLength(name.trim(), { min: 2, max: 100 })) {
+            return res.render("create", {
+              error: "Nome do produto deve ter entre 2 e 100 caracteres.",
+            });
+          }
+
+           if (!price || !validator.isFloat(String(price), { min: 0 })) {
+              return res.render("create", {
+                error: "Preço deve ser um número positivo.",
+              });
+            }
+
+            name: validator.escape(name.trim()),
+    price: parseFloat(price).toFixed(2),
+        */
     }
 
     cleanUp(){
