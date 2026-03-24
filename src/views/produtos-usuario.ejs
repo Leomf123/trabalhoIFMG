@@ -4,34 +4,106 @@
 <div class="container py-4">
     <div class="row">
         <div class="col-12">
-            <h1 class="mb-4">Produtos do Usuário</h1>
+            <h1 class="mb-4 text-center">🛍️ Vitrine de Produtos</h1>
+            <p class="text-center lead mb-5">Conheça os produtos das nossas lojas parceiras e compre com PIX</p>
 
             <% if (produtos && produtos.length > 0) { %>
                 <div class="row">
                     <% produtos.forEach(produto => { %>
                         <div class="col-md-4 mb-4">
                             <div class="card h-100 shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-shop"></i> <%= produto.nomeLoja %>
+                                    </h6>
+                                </div>
                                 <div class="card-body">
-                                    <h5 class="card-title"><%= produto.nome %></h5>
-                                    <p class="card-text text-muted"><%= produto.descricao %></p>
+                                    <h5 class="card-title"><%= produto.name %></h5>
+                                    <p class="card-text text-muted"><%= produto.description %></p>
                                     <p class="card-text">
-                                        <strong>Preço:</strong> R$ <%= produto.preco.toFixed(2) %>
+                                        <strong>Preço:</strong> R$ <%= parseFloat(produto.price).toFixed(2) %>
                                     </p>
                                 </div>
                                 <div class="card-footer bg-transparent">
-                                    <a href="#" class="btn btn-outline-primary w-100">Ver Detalhes</a>
+                                    <button class="btn btn-success w-100" onclick="gerarQRCode('<%= produto.name %>', <%= produto.price %>, '<%= produto.nomeLoja %>')">
+                                        <i class="bi bi-qr-code"></i> Comprar com PIX
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     <% }) %>
                 </div>
             <% } else { %>
-                <div class="alert alert-info">
-                    Este usuário ainda não possui produtos cadastrados.
+                <div class="alert alert-info text-center py-5">
+                    <i class="bi bi-box" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Nenhum produto cadastrado no momento</h4>
+                    <p>Volte mais tarde para conferir as novidades das nossas lojas!</p>
                 </div>
             <% } %>
         </div>
     </div>
 </div>
+
+<!-- Modal para QR Code PIX -->
+<div class="modal fade" id="pixModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">💰 Pagamento via PIX</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div id="qrCodeContainer" class="mb-3 d-flex justify-content-center"></div>
+                <p><strong>Produto:</strong> <span id="produtoNome"></span></p>
+                <p><strong>Loja:</strong> <span id="lojaNome"></span></p>
+                <p><strong>Valor:</strong> R$ <span id="produtoPreco"></span></p>
+                <hr>
+                <p class="text-muted">📱 Escaneie o QR Code com seu banco para pagar via PIX</p>
+                <div class="alert alert-info">
+                    <small><i class="bi bi-info-circle"></i> Após o pagamento, o produto será reservado para você!</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Icons e QR Code Library -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+    function gerarQRCode(produtoNome, produtoPreco, lojaNome) {
+        // Atualiza os textos do modal
+        document.getElementById('produtoNome').innerText = produtoNome;
+        document.getElementById('lojaNome').innerText = lojaNome;
+        document.getElementById('produtoPreco').innerText = produtoPreco.toFixed(2);
+        
+        // Simula um código PIX (em produção, isso viria do backend)
+        // Formato básico do PIX copia e cola
+        const pixData = `00020126360014br.gov.bcb.pix0114+5521999999999520400005303986540${produtoPreco.toFixed(2)}5802BR5913${produtoNome.substring(0, 25)}6009SAO PAULO62070503***6304`;
+        
+        // Limpa o container anterior e gera novo QR Code
+        const qrContainer = document.getElementById('qrCodeContainer');
+        qrContainer.innerHTML = '';
+        
+        try {
+            new QRCode(qrContainer, {
+                text: pixData,
+                width: 250,
+                height: 250
+            });
+        } catch (error) {
+            console.error('Erro ao gerar QR Code:', error);
+            qrContainer.innerHTML = '<p class="text-danger">Erro ao gerar QR Code. Tente novamente.</p>';
+        }
+        
+        // Abre o modal
+        const modal = new bootstrap.Modal(document.getElementById('pixModal'));
+        modal.show();
+    }
+</script>
 
 <%- include('./includes/footer') %>

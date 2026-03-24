@@ -1,14 +1,68 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">Marketplace</a>
+    <a class="navbar-brand" href="/">🏪 Marketplace</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="/login/index">Portal Parceiro</a>
-        </li>
-      </ul>
-    </div>
+      
+      <% if(user) { %>
+        <!-- ALTERAÇÃO Christian: Links para usuário LOGADO -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          
+          <!-- Vitrine Pública -->
+          <li class="nav-item">
+            <a class="nav-link" href="/produtos">
+              <i class="bi bi-shop"></i> Vitrine
+            </a>
+          </li>
+          
+          <!-- ALTERAÇÃO Christian: Botão para Controle da Loja -->
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-light px-3" href="/controle-loja">
+              <i class="bi bi-building"></i> Controle da Loja
+            </a>
+          </li>
+        </ul>
 
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle"></i> Olá, <%= user.nomeLoja || user.nome %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/controle-loja">
+                <i class="bi bi-building"></i> Controle da Loja
+              </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="/login/logout">
+                <i class="bi bi-box-arrow-right"></i> Sair
+              </a></li>
+            </ul>
+          </li>
+        </ul>
+      
+      <% } else { %>
+        <!-- ALTERAÇÃO Christian: Links para usuário NÃO LOGADO -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/produtos">
+              <i class="bi bi-shop"></i> Vitrine
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login/index">
+              <i class="bi bi-box-arrow-in-right"></i> Portal Parceiro
+            </a>
+          </li>
+        </ul>
+      <% } %>
+      
+    </div>
   </div>
 </nav>
+
+<!-- ALTERAÇÃO Christian: Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">

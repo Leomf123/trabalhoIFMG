@@ -1,0 +1,121 @@
+<%- include('./includes/head') %>
+<%- include('./includes/nav1') %>
+
+<div class="container py-4">
+    <div class="row">
+        
+        <!-- ALTERAÇÃO Christian: Menu lateral da Central de Controle -->
+        <div class="col-md-3 mb-4">
+            <div class="list-group shadow-sm">
+                <div class="list-group-item bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-building"></i> Central de Controle</h5>
+                </div>
+                <a href="/controle-loja" class="list-group-item list-group-item-action active">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="/perfil/index/" class="list-group-item list-group-item-action">
+                    <i class="bi bi-eye"></i> Ver Perfil da Loja
+                </a>
+                <a href="/perfil/index/<%= usuario.id %>" class="list-group-item list-group-item-action">
+                    <i class="bi bi-pencil-square"></i> Editar Perfil da Loja
+                </a>
+                <a href="/meus-produtos" class="list-group-item list-group-item-action">
+                    <i class="bi bi-box-seam"></i> Gerenciar Produtos
+                </a>
+                <a href="/produtos/adicionar" class="list-group-item list-group-item-action">
+                    <i class="bi bi-plus-circle"></i> Adicionar Produto
+                </a>
+            </div>
+        </div>
+        
+        <!-- ALTERAÇÃO Christian: Conteúdo principal com dados da loja -->
+        <div class="col-md-9">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-house-door"></i> Dashboard - Minha Loja</h4>
+                </div>
+                <div class="card-body">
+                    
+                    <!-- Mensagens flash -->
+                    <% if (locals.success && locals.success.length > 0) { %>
+                        <div class="alert alert-success">
+                            <% locals.success.forEach(msg => { %>
+                                <i class="bi bi-check-circle"></i> <%= msg %><br>
+                            <% }); %>
+                        </div>
+                    <% } %>
+
+                    <% if (locals.errors && locals.errors.length > 0) { %>
+                        <div class="alert alert-danger">
+                            <% locals.errors.forEach(error => { %>
+                                <i class="bi bi-exclamation-triangle"></i> <%= error %><br>
+                            <% }); %>
+                        </div>
+                    <% } %>
+                    
+                    <!-- ALTERAÇÃO Christian: Dados da loja -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="fw-bold text-primary">🏪 Nome da Loja:</label>
+                                <p class="fs-5"><%= usuario.nomeLoja %></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="fw-bold text-primary">👤 Proprietário:</label>
+                                <p class="fs-5"><%= usuario.nome %></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="fw-bold text-primary">📝 Descrição da Loja:</label>
+                        <p class="fs-5"><%= usuario.descricaoLoja %></p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="fw-bold text-primary">📧 E-mail:</label>
+                        <p class="fs-5"><%= usuario.email %></p>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- ALTERAÇÃO Christian: Estatísticas rápidas -->
+                    <h5 class="mt-3"><i class="bi bi-graph-up"></i> Estatísticas Rápidas</h5>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h3><%= totalProdutos || 0 %></h3>
+                                    <p class="mb-0">Produtos Cadastrados</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h3><%= totalVendas || 0 %></h3>
+                                    <p class="mb-0">Vendas Realizadas</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="/meus-produtos" class="btn btn-primary">
+                            <i class="bi bi-box-seam"></i> Gerenciar Produtos
+                        </a>
+                        <a href="/perfil/index/<%= usuario.id %>" class="btn btn-secondary">
+                            <i class="bi bi-pencil-square"></i> Editar Perfil
+                        </a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<%- include('./includes/footer') %>

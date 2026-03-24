@@ -1,45 +1,79 @@
 <%-include('./includes/head') %>
 <%-include('./includes/nav1') %>
 
-<div class="container">
-       <div class="row">
-              <div class="col-lg-2"></div>
-              <div class="col-lg-8">
-                     <h1 class="text-center">Seu Markplace</h1>
-                     <p class="text-center lead">Lojas Cadastradas:</p>
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <!-- ALTERAÇÃO Christian: Título dinâmico com nome da loja -->
+            <h1 class="text-center">🏪 Perfil da Loja</h1>
+            <p class="text-center lead">Confira os dados cadastrais da sua loja</p>
 
-                     <div class="responsive-table">
-                            <table class="table my-3">
-                                   <tr>
-                                          <td>Nome: Denise</td>
-                                   </tr>
-                                   <tr>
-                                         
-                                          <td>Sobrenome: Carolina</td>
-                                          
-                                   </tr>
-                                   <tr>
-                                         
-                                          <td>Email: ab@gmail.com</td>
-                                          
-                                   </tr>
-                                      <tr>
-                                         
-                                          <td>Telefone: 31999999999</td>
-                                          
-                                   </tr>
+            <!-- Mensagens flash -->
+            <% if (locals.success && locals.success.length > 0) { %>
+                <div class="alert alert-success">
+                    <% locals.success.forEach(msg => { %>
+                        <i class="bi bi-check-circle"></i> <%= msg %><br>
+                    <% }); %>
+                </div>
+            <% } %>
 
-                            </table>
-                     </div>
+            <% if (locals.errors && locals.errors.length > 0) { %>
+                <div class="alert alert-danger">
+                    <% locals.errors.forEach(error => { %>
+                        <i class="bi bi-exclamation-triangle"></i> <%= error %><br>
+                    <% }); %>
+                </div>
+            <% } %>
 
+            <!-- ALTERAÇÃO Christian: Exibe dados do usuário logado dinamicamente -->
+            <% if (usuario) { %>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-shop"></i> Informações da Loja</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                             <tr>
+                                <th width="35%">Nome do Proprietário:</th>
+                                <td><%= usuario.nome %></td>
+                            </tr>
+                            <tr>
+                                <th>Nome da Loja:</th>
+                                <td><strong><%= usuario.nomeLoja %></strong></td>
+                            </tr>
+                            <tr>
+                                <th>Descrição da Loja:</th>
+                                <td><%= usuario.descricaoLoja %></td>
+                            </tr>
+                            <tr>
+                                <th>E-mail:</th>
+                                <td><%= usuario.email %></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="card-footer text-center">
+                        <!-- ALTERAÇÃO Christian: Botões para editar e voltar -->
+                        <a href="/perfil/index/<%= usuario.id %>" class="btn btn-primary">
+                            <i class="bi bi-pencil-square"></i> Editar Perfil
+                        </a>
+                        <a href="/controle-loja" class="btn btn-secondary">
+                            <i class="bi bi-building"></i> Central de Controle
+                        </a>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="alert alert-warning text-center">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Você precisa estar logado para visualizar seu perfil.
+                    <br><br>
+                    <a href="/login/index" class="btn btn-primary">Fazer Login</a>
+                </div>
+            <% } %>
 
-
-
-              </div>
-              <div class="col-lg-2"></div>
-       </div>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
 </div>
 
 <%-include('./includes/footer') %>
-
-

@@ -1,50 +1,123 @@
 const Usuario = require('../models/UsuariosModel');
+const Produtos = require('../models/ProdutosModel');
 
-exports.index = function (req, res) {
-    return res.render('editarPerfil', {
-        usuario: {}
-    });
-};
+// ALTERAÇÃO Christian: Controller de Perfil
 
-exports.editIndex = async function (req, res) {
+// GET /controle-loja - Central de Controle da Loja
+exports.controleLoja = async (req, res) => {
     try {
-        const { id } = req.params;
-
-        if (!id) return res.render('404');
-
-        const usuario = await Usuario.buscarPorId(id);
-        if (!usuario) return res.render('404');
-
-        res.render('editarPerfil', { usuario });
-
-    } catch (e) {
-        console.error(e);
-        res.render('404');
-    }
-};
-
-exports.edit = async function (req, res) {
-    try {
-        const { id } = req.params;
-        if (!id) return res.render('404');
+        // Verifica se usuário está logado
+        if (!req.session.usuario || !req.session.usuario.id) {
+            req.flash('errors', 'Você precisa estar logado para acessar a Central de Controle');
+            return res.redirect('/login/index');
+        }
         
+        const usuario = await Usuario.buscarPorId(req.session.usuario.id);
+        const produtos = await Produtos.buscarPorUsuario(req.session.usuario.id);
+        const totalProdutos = produtos ? produtos.length : 0;
+        
+        res.render('controleLoja', { 
+            usuario: usuario,
+            totalProdutos: totalProdutos,
+            totalVendas: 0 // Implementar depois
+        });
+    } catch (error) {
+        console.error('Erro ao carregar Central de Controle:', error);
+        req.flash('errors', 'Erro ao carregar Central de Controle');
+        res.redirect('/');
+    }
+}
 
+// GET /perfil/index/ - Exibe perfil do usuário logado
+exports.index = async (req, res) => {
+    try {
+        if (!req.session.usuario || !req.session.usuario.id) {
+            req.flash('errors', 'Você precisa estar logado para acessar seu perfil');
+            return res.redirect('/login/index');
+        }
+        
+        const usuario = await Usuario.buscarPorId(req.session.usuario.id);
+        
+        if (!usuario) {
+            req.flash('errors', 'Usuário não encontrado');
+            return res.redirect('/login/index');
+        }
+        
+        res.render('perfilView', { usuario: usuario });
+    } catch (error) {
+        console.error('Erro ao carregar perfil:', error);
+        req.flash('errors', 'Erro ao carregar perfil');
+        res.redirect('/');
+    }
+}
+
+// GET /perfil/index/:id - Exibe formulário de edição
+exports.editIndex = async (req, res) => {
+    try {
+        const id = req.params.id;
+        
+        if (!req.session.usuario || !req.session.usuario.id) {
+            req.flash('errors', 'Você precisa estar logado');
+            return res.redirect('/login/index');
+        }
+        
+        if (req.session.usuario.id != id) {
+            req.flash('errors', 'Você não tem permissão para editar este perfil');
+            return res.redirect('/controle-loja');
+        }
+        
+        const usuario = await Usuario.buscarPorId(id);
+        
+        if (!usuario) {
+            req.flash('errors', 'Usuário não encontrado');
+            return res.redirect('/controle-loja');
+        }
+        
+        res.render('editarPerfil', { usuario: usuario });
+    } catch (error) {
+        console.error('Erro ao carregar formulário de edição:', error);
+        req.flash('errors', 'Erro ao carregar formulário');
+        res.redirect('/controle-loja');
+    }
+}
+
+// POST /perfil/edit/:id - Processa a edição
+exports.edit = async (req, res) => {
+    try {
+        const id = req.params.id;
+        
+        if (!req.session.usuario || !req.session.usuario.id) {
+            req.flash('errors', 'Você precisa estar logado');
+            return res.redirect('/login/index');
+        }
+        
+        if (req.session.usuario.id != id) {
+            req.flash('errors', 'Você não tem permissão para editar este perfil');
+            return res.redirect('/controle-loja');
+        }
+        
         const usuario = new Usuario(req.body);
-        await usuario.edit(id);
-
-
+        const usuarioAtualizado = await usuario.edit(id);
+        
         if (usuario.errors.length > 0) {
             req.flash('errors', usuario.errors);
-            return req.session.save(() => res.redirect(`/perfil/index/${id}`));
+            return res.redirect(`/perfil/index/${id}`);
         }
-
-
-        req.flash('success', 'Usuario editado com sucesso!');
-        req.session.save(() => res.redirect(`/perfil/index/${id}`));
-        return;
-    } catch (e) {
-        console.error(e);
-        return res.render('404');
+        
+        // Atualiza os dados na sessão
+        req.session.usuario = {
+            id: usuarioAtualizado.id,
+            email: usuarioAtualizado.email,
+            nome: usuarioAtualizado.nome,
+            nomeLoja: usuarioAtualizado.nomeLoja,
+            descricaoLoja: usuarioAtualizado.descricaoLoja
+        };
+        
+        req.flash('success', 'Perfil atualizado com sucesso!');
+        res.redirect(`/controle-loja`);
+    } catch (error) {
+        console.error('Erro ao editar perfil:', error);
+        req.flash('errors', 'Erro ao editar perfil');
+        res.redirect(`/controle-loja`);
     }
-};
-
+}

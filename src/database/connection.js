@@ -23,12 +23,14 @@ function connect(){
         )
     `);
 
+    // ALTERAÇÃO Christian: Adicionada coluna usuario_id na tabela products
     db.run(`
         CREATE TABLE IF NOT EXISTS products(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT UNIQUE NOT NULL,
             description TEXT NOT NULL,
-            price TEXT NOT NULL
+            price TEXT NOT NULL,
+            usuario_id INTEGER
         )
     `);
 
@@ -55,10 +57,11 @@ function get(sql, params = []){
     });
 }
 
+// ALTERAÇÃO Christian: Corrigido database.get para database.all
 function all(sql, params = []){
     const database = connect();
     return new Promise((resolve, reject) => {
-        database.get(sql, params, (err, rows) => {
+        database.all(sql, params, (err, rows) => {
             if(err) return reject(err);
             resolve(rows);
         });

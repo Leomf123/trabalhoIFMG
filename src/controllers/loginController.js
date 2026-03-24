@@ -2,7 +2,8 @@ const Usuario = require('../models/UsuariosModel');
 
 //Por get
 exports.index = (req, res) => {
-    if(req.session.user){
+    // ALTERAÇÃO Christian: Verifica session.usuario (padrão usado nas rotas)
+    if(req.session.usuario){
         return res.render('login-logado');
     }
     res.render('login');
@@ -47,8 +48,6 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
 
     try{
-        //Aqui que eu vou buscar no banco de dados pelo email e senha do body
-        //e se encontrar retorno o do banco de dados pra associar com os da sessão
         const usuario = new Usuario(req.body);
         await usuario.login();
 
@@ -58,6 +57,10 @@ exports.login = async (req, res) => {
                 res.redirect('/login/index');
             });
         }
+        
+        // ALTERAÇÃO Christian: Busca dados completos do usuário para a sessão
+        const userData = await Usuario.buscarPorId(usuario.user.id);
+        
         //regenerar a sessão para evitar session fixation
         req.session.regenerate(err => {
             if(err){
@@ -65,13 +68,18 @@ exports.login = async (req, res) => {
                 return res.render('404');
             }
 
-            req.session.user = {
+            // ALTERAÇÃO Christian: Sessão com dados completos do usuário
+            req.session.usuario = {
                 id: usuario.user.id,
-                email: usuario.user.email
+                email: usuario.user.email,
+                nome: userData.nome,
+                nomeLoja: userData.nomeLoja,
+                descricaoLoja: userData.descricaoLoja
             }
+            
             req.flash('success', 'Login realizado com sucesso!');
             return req.session.save(() => {
-                res.redirect('/login/index');
+                res.redirect('/meus-produtos'); // ALTERAÇÃO Christian: Redireciona para Central da Loja
             });
         });
 
