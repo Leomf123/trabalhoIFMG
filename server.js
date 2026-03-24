@@ -8,7 +8,7 @@ const helmet = require('helmet');
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 const flash = require('connect-flash');
-const {middlewareGlobal} = require('./src/middlewares/middlewares');
+const { checkCsrfError, injectCsrfToken, middlewareGlobal } = require('./src/middlewares/middlewares');
 
 app.use(helmet());
 app.use(session({
@@ -27,12 +27,14 @@ app.use(session({
 app.use(express.urlencoded({ extended: true}));
 
 app.use(flash());
+app.use(injectCsrfToken);
 app.use(middlewareGlobal);
 app.use(routes);
 
 app.set('views', path.resolve(__dirname, 'src', 'views'));
 app.set('view engine', 'ejs');
 
+app.use(checkCsrfError);
 //Rota 404
 app.use((req, res, next) => {
     res.status(404).render('404');
