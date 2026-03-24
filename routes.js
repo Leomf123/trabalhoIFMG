@@ -9,6 +9,7 @@ const produtoListController = require('./src/controllers/produtoListController')
 const produtoDeleteController = require('./src/controllers/produtoDeleteController');
 // Controllers Produto
 const produtoController = require('./src/controllers/produtoController');
+const { csrfProtection } = require('./src/middlewares/middlewares');
 
 //Rotas Home
 router.get('/', homeController.index);
@@ -16,12 +17,12 @@ router.get('/', homeController.index);
 //Rotas Login Usuário
 router.get('/login/index', loginController.index);
 router.get('/login/logout', loginController.logout);
-router.post('/login/login', loginController.login);
-router.post('/login/register', loginController.register);
+router.post('/login/login', csrfProtection, loginController.login);
+router.post('/login/register', csrfProtection, loginController.register);
 
 //Rotas Perfil Usuário
 router.get('/perfil/index/:id', perfilController.editIndex);
-router.post('/perfil/edit/:id', perfilController.edit);
+router.post('/perfil/edit/:id', csrfProtection, perfilController.edit);
 
 // Rotas de Produtos
 // Listar produtos do usuário logado
@@ -35,10 +36,10 @@ router.get('/usuario/:id/produtos', produtoListController.listarPorUsuarioId);
 
 // Cadastrar Produto
 router.get("/create", produtoController.createForm);
-router.post("/create", produtoController.create);
+router.post("/create", csrfProtection, produtoController.create);
 
 // Editar Produto
 router.get('/produtos/editar/:id', produtoController.renderEditForm);
-router.post('/produtos/editar/:id', produtoController.updateProduto);
+router.post('/produtos/editar/:id', csrfProtection, produtoController.updateProduto);
 
 module.exports = router;
