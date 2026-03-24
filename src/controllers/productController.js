@@ -1,80 +1,34 @@
-const validator = require("validator");
-const Product = require("../models/productModel");
-
-// ── Listar todos ───────────────────────────────────────────────────────────
-function index(req, res) {
-  const products = Product.getAll();
-  res.render("index", { products });
-}
+const Produto = require("../models/ProdutosModel");
 
 // ── Formulário criar produto ───────────────────────────────────────────────
-function createForm(req, res) {
-  res.render("create", { error: null });
+exports.createForm = (req, res) => {
+  res.render("create");
 }
 
 // ── Criar produto ──────────────────────────────────────────────────────────
-function create(req, res) {
-  const { name, price } = req.body;
+exports.create = async (req, res) => {
+  try {
 
-  if (!name || !validator.isLength(name.trim(), { min: 2, max: 100 })) {
-    return res.render("create", {
-      error: "Nome do produto deve ter entre 2 e 100 caracteres.",
-    });
+    const produto = new Produto(req.body);
+    const novoProduto = await produto.register();
+
+    if (produto.errors.length > 0) {
+      req.flash('errors', produto.errors);
+      return req.session.save(() =>
+        res.redirect(req.get("Referrer") || "/create")
+      );
+    }
+
+    // Redireciona para edição do contato recém-criado
+    req.flash('success', `Produto cadastrado com sucesso! ID: ${novoProduto.id}`);
+    return req.session.save(() =>
+      //res.redirect(`/produto/index/${novoProduto.id}`) levar pra editar
+      res.redirect('/create')
+    );
+
+  } catch (e) {
+    console.error(e);
+    return res.render('404');
   }
 
-  if (!price || !validator.isFloat(String(price), { min: 0 })) {
-    return res.render("create", {
-      error: "Preço deve ser um número positivo.",
-    });
-  }
-
-  Product.create({
-    name: validator.escape(name.trim()),
-    price: parseFloat(price).toFixed(2),
-  });
-
-  res.redirect("/");
 }
-
-// ── Formulário editar produto ──────────────────────────────────────────────
-function editForm(req, res) {
-  const product = Product.getById(req.params.id);
-  if (!product) return res.status(404).render("404");
-  res.render("edit", { product, error: null });
-}
-
-// ── Atualizar produto ──────────────────────────────────────────────────────
-function update(req, res) {
-  const { name, price } = req.body;
-
-  if (!name || !validator.isLength(name.trim(), { min: 2, max: 100 })) {
-    const product = Product.getById(req.params.id);
-    return res.render("edit", {
-      product,
-      error: "Nome do produto deve ter entre 2 e 100 caracteres.",
-    });
-  }
-
-  if (!price || !validator.isFloat(String(price), { min: 0 })) {
-    const product = Product.getById(req.params.id);
-    return res.render("edit", {
-      product,
-      error: "Preço deve ser um número positivo.",
-    });
-  }
-
-  Product.update(req.params.id, {
-    name: validator.escape(name.trim()),
-    price: parseFloat(price).toFixed(2),
-  });
-
-  res.redirect("/");
-}
-
-// ── Deletar produto ────────────────────────────────────────────────────────
-function remove(req, res) {
-  Product.remove(req.params.id);
-  res.redirect("/");
-}
-
-module.exports = { index, createForm, create, editForm, update, remove };

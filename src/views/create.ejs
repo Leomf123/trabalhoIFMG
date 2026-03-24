@@ -1,16 +1,15 @@
-<%- include('includes/header') %>
+<%- include('includes/head') %>
 
-<h1 class="mb-4">Novo Produto</h1>
-
-<% if (error) { %>
-  <div class="alert alert-danger"><%= error %></div>
-<% } %>
+<h1 class="mb-4">Cadastrar Novo Produto</h1>
 
 <form action="/create" method="POST" class="col-md-6">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
   <div class="mb-3">
     <label for="name" class="form-label">Nome:</label>
     <input type="text" class="form-control" name="name" id="name" required minlength="2" maxlength="100">
+  </div>
+   <div class="mb-3">
+    <label for="name" class="form-label">Descrição do Produto:</label>
+    <input type="text" class="form-control" name="description" id="description" required minlength="2" maxlength="100">
   </div>
   <div class="mb-3">
     <label for="price" class="form-label">Preço (R$):</label>
