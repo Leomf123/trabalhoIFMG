@@ -3,12 +3,14 @@ const path = require('path');
 const {connect} = require('./src/database/connection');
 const routes = require('./routes');
 const app = express();
+const helmet = require('helmet');
 
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 const flash = require('connect-flash');
 const {middlewareGlobal} = require('./src/middlewares/middlewares');
 
+app.use(helmet());
 app.use(session({
     secret: 'fgsgsfdgsfdgsfdgsfhnmjb',
     resave: false,
