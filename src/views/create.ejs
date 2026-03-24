@@ -1,0 +1,23 @@
+<%- include('includes/header') %>
+
+<h1 class="mb-4">Novo Produto</h1>
+
+<% if (error) { %>
+  <div class="alert alert-danger"><%= error %></div>
+<% } %>
+
+<form action="/create" method="POST" class="col-md-6">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <div class="mb-3">
+    <label for="name" class="form-label">Nome:</label>
+    <input type="text" class="form-control" name="name" id="name" required minlength="2" maxlength="100">
+  </div>
+  <div class="mb-3">
+    <label for="price" class="form-label">Preço (R$):</label>
+    <input type="number" class="form-control" name="price" id="price" required step="0.01" min="0">
+  </div>
+  <button type="submit" class="btn btn-primary">Salvar</button>
+  <a href="/" class="btn btn-secondary ms-2">Cancelar</a>
+</form>
+
+<%- include('includes/footer') %>

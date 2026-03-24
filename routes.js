@@ -37,4 +37,13 @@ router.post('/produtos/deletar/:id', produtoDeleteController.deleteProduto);
 // Rota para listar produtos de um usuário específico (para perfil público)
 router.get('/usuario/:id/produtos', produtoListController.listarPorUsuarioId);
 
+//antonioCadastrarProduto
+// Todas as rotas de produto exigem autenticação
+router.get("/", isAuthenticated, productController.index);
+router.get("/create", isAuthenticated, productController.createForm);
+router.post("/create", isAuthenticated, productController.create);
+router.get("/edit/:id", isAuthenticated, productController.editForm);
+router.post("/edit/:id", isAuthenticated, productController.update);
+router.post("/delete/:id", isAuthenticated, productController.remove);
+
 module.exports = router;
