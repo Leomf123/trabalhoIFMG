@@ -58,7 +58,7 @@ function get(sql, params = []){
 function all(sql, params = []){
     const database = connect();
     return new Promise((resolve, reject) => {
-        database.get(sql, params, (err, rows) => {
+        database.all(sql, params, (err, rows) => {
             if(err) return reject(err);
             resolve(rows);
         });
