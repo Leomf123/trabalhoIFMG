@@ -1,46 +1,45 @@
 <%-include('./includes/head') %>
 <%-include('./includes/nav1') %>
 
-<div class="container">
-       <div class="row">
-              <div class="col-lg-2"></div>
-              <div class="col-lg-8">
-                     <h1 class="text-center">Seu Markplace</h1>
-                     <p class="text-center lead">Lojas Cadastradas:</p>
+       <div class="container">
+              <div class="row">
+                     <div class="col-lg-2"></div>
+                     <div class="col-lg-8">
+                            <h1 class="text-center">Seu Markplace</h1>
+                            <p class="text-center lead">Lojas Cadastradas:</p>
 
-                     <div class="responsive-table">
-                            <table class="table my-3">
-                                   <tr>
-                                          <td>Nome</td>
-                                          <td>Sobrenome</td>
-                                          <td>Email</td>
-                                          <td>Telefone</td>
-                                          <td></td>
-                                   </tr>
-                                   <tr>
-                                          <td>Nome</td>
-                                          <td>Sobrenome</td>
-                                          <td>Email</td>
-                                          <td>Telefone</td>
-                                          <td></td>
-                                   </tr>
-                                   <tr>
-                                          <td>Nome</td>
-                                          <td>Sobrenome</td>
-                                          <td>Email</td>
-                                          <td>Telefone</td>
-                                          <td></td>
-                                   </tr>
+                            <%- include('includes/messages') %>
+                            <% if(usuarios.length> 0) { %>
 
-                            </table>
-                     </div>
-
-
-
-
+                            <div class="responsive-table">
+                                   <table class="table my-3">
+                                          <thead>
+                                                 <tr>
+                                                        <th>Proprietário(a):</th>
+                                                        <th>Nome da Loja:</th>
+                                                        <th>Descrição da Loja:</th>
+                                                 </tr>
+                                          </thead>
+                                          <tbody>
+                                          <% usuarios.forEach( usuario=> { %>
+                                          
+                                                 <tr>
+                                                        <td><%= usuario.nome %></td>
+                                                        <td><%= usuario.nomeLoja %></td>
+                                                        <td><%= usuario.descricaoLoja%></td>
+                                                        <td></td>
+                                                 </tr>
+                                          
+                                          <% }) %>
+                                          </tbody>
+                                   </table>
+                            </div>
+                                   <% } else { %>
+                                   <p class="text-center lead">Não há lojas Cadastradas!</p>
+                                   <% } %>
+                            </div>
+                     <div class="col-lg-2"></div>
               </div>
-              <div class="col-lg-2"></div>
        </div>
-</div>
 
 <%-include('./includes/footer') %>
