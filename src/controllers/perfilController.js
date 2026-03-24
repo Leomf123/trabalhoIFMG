@@ -1,11 +1,5 @@
 const Usuario = require('../models/UsuariosModel');
 
-exports.index = function (req, res) {
-    return res.render('editarPerfil', {
-        usuario: {}
-    });
-};
-
 exports.editIndex = async function (req, res) {
     try {
         const { id } = req.params;
