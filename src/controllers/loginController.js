@@ -3,7 +3,7 @@ const Usuario = require('../models/UsuariosModel');
 //Por get
 exports.index = (req, res) => {
     if(req.session.user){
-        return res.render('login-logado');
+        return res.render('login-logado', {user: req.session.user });
     }
     res.render('login');
 }

@@ -2,7 +2,13 @@
 <%-include('./includes/nav1') %>
 
 <div class="container">
-       <h1>Você já está logado!</h1>
+       <div class="row justify-content-center">
+              <div class="col-log-8 my-3">
+                     <h3 class="text-center">Olá, <%= user.email%></h3>
+                     <p class="text-center lead">Seja bem vindo(a)! Você precisa sair para criar uma nova conta.</p>
+                     <%- include('./includes/messages') %>
+              </div>
+       </div>
 </div>
 
 <%-include('./includes/footer') %>
