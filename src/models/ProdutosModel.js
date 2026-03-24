@@ -14,7 +14,6 @@ class Produtos{
         if(this.errors.length > 0) return;
 
         try{
-            console.log('Entrou no try');
             const result = await db.run(
                 `INSERT INTO products (
                 name,
@@ -65,7 +64,6 @@ class Produtos{
             SELECT * FROM products WHERE name = ?`,
         [name]
         );
-        console.log(product);
 
         const convertId = id ? Number(id): null;
 

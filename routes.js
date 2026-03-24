@@ -9,6 +9,8 @@ const produtoListController = require('./src/controllers/produtoListController')
 // NOVOS: Importando os controllers de adicionar e deletar produtos
 const produtoDeleteController = require('./src/controllers/produtoDeleteController');
 
+const productController = require('./src/controllers/productController');
+
 //Rotas Home
 router.get('/', homeController.index);
 
