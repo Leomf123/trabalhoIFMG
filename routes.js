@@ -33,7 +33,7 @@ router.get('/produtos/deletar/:id', produtoDeleteController.confirmDelete);
 
 // Cadastrar Produto
 router.get("/create", isAuthenticated, produtoController.createForm);
-router.post("/create/:id", csrfProtection, produtoController.create);
+router.post("/create", csrfProtection, produtoController.create);
 
 // Editar Produto
 router.get('/produtos/editar/:id', isAuthenticated, produtoController.renderEditForm);

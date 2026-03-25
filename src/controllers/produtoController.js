@@ -9,8 +9,10 @@ exports.createForm = (req, res) => {
 exports.create = async (req, res) => {
   try {
 
+    const usuarioId = req.session.user.id;
+
     const produto = new Produto(req.body);
-    const novoProduto = await produto.register(req.params.id);
+    const novoProduto = await produto.register(usuarioId);
 
     if (produto.errors.length > 0) {
       req.flash('errors', produto.errors);

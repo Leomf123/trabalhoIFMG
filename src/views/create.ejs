@@ -3,7 +3,7 @@
 
 <h1 class="mb-4">Cadastrar Novo Produto</h1>
 <%- include('includes/messages')%>
-<form action="/create/<%= user.id %>" method="POST" class="col-md-6">
+<form action="/create" method="POST" class="col-md-6">
   <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
   <div class="mb-3">
     <label for="name" class="form-label">Nome:</label>
