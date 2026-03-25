@@ -11,20 +11,7 @@
                 </a>
             </div>
 
-            <!-- Mensagens Flash -->
-            <% if (typeof success !== 'undefined' && success) { %>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <%= success %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <% } %>
-
-            <% if (typeof errors !== 'undefined' && errors) { %>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <%= errors %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <% } %>
+            <%- include('./includes/messages') %>
 
             <!-- Lista de Produtos -->
             <% if (produtos && produtos.length > 0) { %>
@@ -33,10 +20,10 @@
                         <div class="col-md-4 mb-4">
                             <div class="card h-100 shadow-sm">
                                 <div class="card-body">
-                                    <h5 class="card-title"><%= produto.nome %></h5>
-                                    <p class="card-text text-muted"><%= produto.descricao %></p>
+                                    <h5 class="card-title"><%= produto.name %></h5>
+                                    <p class="card-text text-muted"><%= produto.description %></p>
                                     <p class="card-text">
-                                        <strong>Preço:</strong> R$ <%= produto.preco.toFixed(2) %>
+                                        <strong>Preço:</strong> R$ <%= produto.price %>
                                     </p>
                                 </div>
                                 <div class="card-footer bg-transparent border-top-0">
@@ -45,38 +32,16 @@
                                            class="btn btn-outline-primary btn-sm">
                                             <i class="bi bi-pencil"></i> Editar
                                         </a>
-                                        <button type="button" 
-                                                class="btn btn-outline-danger btn-sm" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#deleteModal<%= produto.id %>">
+
+                                        <a href="/produtos/deletar/<%= produto.id %>" 
+                                           class="btn btn-outline-danger btn-sm">
                                             <i class="bi bi-trash"></i> Deletar
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Modal de Confirmação de Deleção -->
-                        <div class="modal fade" id="deleteModal<%= produto.id %>" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Confirmar Deleção</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Tem certeza que deseja deletar o produto <strong>"<%= produto.nome %>"</strong>?</p>
-                                        <p class="text-danger"><small>Esta ação não pode ser desfeita.</small></p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <form action="/produtos/deletar/<%= produto.id %>" method="POST" style="display: inline;">
-                                            <button type="submit" class="btn btn-danger">Sim, deletar</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     <% }) %>
                 </div>
             <% } else { %>

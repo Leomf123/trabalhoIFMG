@@ -4,9 +4,6 @@ const router = express.Router();
 const homeController = require('./src/controllers/homeController');
 const loginController = require('./src/controllers/loginController');
 const perfilController = require('./src/controllers/perfilController');
-const produtoListController = require('./src/controllers/produtoListController');
-// NOVOS: Importando os controllers de adicionar e deletar produtos
-const produtoDeleteController = require('./src/controllers/produtoDeleteController');
 // Controllers Produto
 const produtoController = require('./src/controllers/produtoController');
 const { csrfProtection, isAuthenticated } = require('./src/middlewares/middlewares');
@@ -22,24 +19,21 @@ router.post('/login/register', csrfProtection, loginController.register);
 
 //Rotas Perfil Usuário
 router.get('/perfil/index/:id', isAuthenticated, perfilController.editIndex);
-router.post('/perfil/edit/:id', csrfProtection, perfilController.edit);
+router.post('/perfil/edit/:id', csrfProtection, isAuthenticated, perfilController.edit);
 
 // Rotas de Produtos
 // Listar produtos do usuário logado
-router.get('/meus-produtos', produtoListController.index);
+router.get('/meus-produtos', isAuthenticated, produtoController.index);
 
 // Deletar produto
-router.post('/produtos/deletar/:id', produtoDeleteController.deleteProduto);
-
-// Rota para listar produtos de um usuário específico (para perfil público)
-router.get('/usuario/:id/produtos', produtoListController.listarPorUsuarioId);
+router.get('/produtos/deletar/:id', isAuthenticated, produtoController.deleteProduto);
 
 // Cadastrar Produto
 router.get("/create", isAuthenticated, produtoController.createForm);
-router.post("/create", csrfProtection, produtoController.create);
+router.post("/create", csrfProtection, isAuthenticated, produtoController.create);
 
 // Editar Produto
 router.get('/produtos/editar/:id', isAuthenticated, produtoController.renderEditForm);
-router.post('/produtos/editar/:id', csrfProtection, produtoController.updateProduto);
+router.post('/produtos/editar/:id', csrfProtection, isAuthenticated, produtoController.updateProduto);
 
 module.exports = router;
