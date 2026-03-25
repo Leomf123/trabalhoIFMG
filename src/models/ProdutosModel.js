@@ -81,9 +81,10 @@ class Produtos{
         );
     }
 
-    static async buscarProdutos(){
+    static async buscarProdutos(id){
         return await db.all(
-            `SELECT * FROM products ORDER BY id DESC`
+            `SELECT * FROM products WHERE usuario_id = ? ORDER BY id DESC`,
+            [id]
         );
     }
 

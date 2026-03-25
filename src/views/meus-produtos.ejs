@@ -11,20 +11,7 @@
                 </a>
             </div>
 
-            <!-- Mensagens Flash -->
-            <% if (typeof success !== 'undefined' && success) { %>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <%= success %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <% } %>
-
-            <% if (typeof errors !== 'undefined' && errors) { %>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <%= errors %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <% } %>
+            <%- include('./includes/messages') %>
 
             <!-- Lista de Produtos -->
             <% if (produtos && produtos.length > 0) { %>
@@ -33,10 +20,10 @@
                         <div class="col-md-4 mb-4">
                             <div class="card h-100 shadow-sm">
                                 <div class="card-body">
-                                    <h5 class="card-title"><%= produto.nome %></h5>
-                                    <p class="card-text text-muted"><%= produto.descricao %></p>
+                                    <h5 class="card-title"><%= produto.name %></h5>
+                                    <p class="card-text text-muted"><%= produto.description %></p>
                                     <p class="card-text">
-                                        <strong>Preço:</strong> R$ <%= produto.preco.toFixed(2) %>
+                                        <strong>Preço:</strong> R$ <%= produto.price %>
                                     </p>
                                 </div>
                                 <div class="card-footer bg-transparent border-top-0">

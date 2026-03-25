@@ -75,3 +75,23 @@ exports.updateProduto = async (req, res) => {
         return res.render('404');
     }
 }
+
+
+// Listar produtos do usuário logado
+exports.index = async (req, res) => {
+    try {
+
+        const usuarioId = req.session.user.id;
+
+        const produtos = await Produto.buscarProdutos(usuarioId);
+
+        return res.render('meus-produtos', {
+            produtos: produtos || []
+        });
+
+    } catch (error) {
+        console.error("Erro ao listar produtos:", error);
+        req.flash('errors', 'Erro ao carregar produtos');
+        return res.redirect('/');
+    }
+};
