@@ -19,7 +19,7 @@ router.post('/login/register', csrfProtection, loginController.register);
 
 //Rotas Perfil Usuário
 router.get('/perfil/index/:id', isAuthenticated, perfilController.editIndex);
-router.post('/perfil/edit/:id', csrfProtection, perfilController.edit);
+router.post('/perfil/edit/:id', csrfProtection, isAuthenticated, perfilController.edit);
 
 // Rotas de Produtos
 // Listar produtos do usuário logado
@@ -30,10 +30,10 @@ router.get('/produtos/deletar/:id', isAuthenticated, produtoController.deletePro
 
 // Cadastrar Produto
 router.get("/create", isAuthenticated, produtoController.createForm);
-router.post("/create", csrfProtection, produtoController.create);
+router.post("/create", csrfProtection, isAuthenticated, produtoController.create);
 
 // Editar Produto
 router.get('/produtos/editar/:id', isAuthenticated, produtoController.renderEditForm);
-router.post('/produtos/editar/:id', csrfProtection, produtoController.updateProduto);
+router.post('/produtos/editar/:id', csrfProtection, isAuthenticated, produtoController.updateProduto);
 
 module.exports = router;
