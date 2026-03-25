@@ -29,7 +29,8 @@ class Produtos{
             return {id: result.id};
 
         } catch(e){
-
+            console.error(e);
+            return res.render('404');
         }
     }
 

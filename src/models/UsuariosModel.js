@@ -48,7 +48,7 @@ class Usuario {
                 emai: this.body.email,
             }
 
-        } catch (e) {
+        } catch(e) {
             if (e.message.includes('UNIQUE')) {
                 this.errors.push('Usuário já existe');
                 return;
