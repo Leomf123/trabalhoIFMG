@@ -26,7 +26,7 @@ router.post('/perfil/edit/:id', csrfProtection, isAuthenticated, perfilControlle
 router.get('/meus-produtos', isAuthenticated, produtoController.index);
 
 // Deletar produto
-router.get('/produtos/deletar/:id', isAuthenticated, produtoController.deleteProduto);
+router.post('/produtos/deletar/:id', csrfProtection, isAuthenticated, produtoController.deleteProduto);
 
 // Cadastrar Produto
 router.get("/create", isAuthenticated, produtoController.createForm);
