@@ -9,19 +9,19 @@ const produtoListController = require('./src/controllers/produtoListController')
 const produtoDeleteController = require('./src/controllers/produtoDeleteController');
 // Controllers Produto
 const produtoController = require('./src/controllers/produtoController');
-const { csrfProtection } = require('./src/middlewares/middlewares');
+const { csrfProtection, isAuthenticated } = require('./src/middlewares/middlewares');
 
 //Rotas Home
 router.get('/', homeController.index);
 
 //Rotas Login Usuário
 router.get('/login/index', loginController.index);
-router.get('/login/logout', loginController.logout);
+router.get('/login/logout', isAuthenticated, loginController.logout);
 router.post('/login/login', csrfProtection, loginController.login);
 router.post('/login/register', csrfProtection, loginController.register);
 
 //Rotas Perfil Usuário
-router.get('/perfil/index/:id', perfilController.editIndex);
+router.get('/perfil/index/:id', isAuthenticated, perfilController.editIndex);
 router.post('/perfil/edit/:id', csrfProtection, perfilController.edit);
 
 // Rotas de Produtos
@@ -35,11 +35,11 @@ router.post('/produtos/deletar/:id', produtoDeleteController.deleteProduto);
 router.get('/usuario/:id/produtos', produtoListController.listarPorUsuarioId);
 
 // Cadastrar Produto
-router.get("/create", produtoController.createForm);
+router.get("/create", isAuthenticated, produtoController.createForm);
 router.post("/create", csrfProtection, produtoController.create);
 
 // Editar Produto
-router.get('/produtos/editar/:id', produtoController.renderEditForm);
+router.get('/produtos/editar/:id', isAuthenticated, produtoController.renderEditForm);
 router.post('/produtos/editar/:id', csrfProtection, produtoController.updateProduto);
 
 module.exports = router;

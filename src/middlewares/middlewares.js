@@ -28,3 +28,12 @@ module.exports.middlewareGlobal = (req, res, next) => {
     res.locals.user = req.session.user;
     next();
 }
+
+exports.isAuthenticated = (req, res, next) => {
+    if(!req.session.user) {
+        req.flash('errors', 'Você precisa fazer login!');
+        req.session.save(() => res.redirect('/login/index'));
+        return;       
+    }
+    next();
+}
