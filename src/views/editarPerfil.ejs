@@ -14,7 +14,7 @@
             <form action="/perfil/edit/<%= usuario.id %>" method="POST">
               <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
               <div class="form-group">
-                <label>Nome</label>
+                <label>Nome:</label>
                 <input value="<%= usuario.nome %>" type="text" class="form-control my-2" name="nome">
               </div>
               <div class="form-group">

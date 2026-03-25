@@ -1,6 +1,10 @@
 <%- include('includes/head') %>
 <%- include('includes/nav') %>
 
+<div class="container">
+<div class="row">
+<div class="col-log-2"></div>
+<div class="col-log-8 my-3">
 <h1 class="mb-4">Cadastrar Novo Produto</h1>
 <%- include('includes/messages')%>
 <form action="/create" method="POST" class="col-md-6">
@@ -20,5 +24,8 @@
   <button type="submit" class="btn btn-primary">Salvar</button>
   <a href="/" class="btn btn-secondary ms-2">Cancelar</a>
 </form>
+</div>
+</div>
+</div>
 
 <%- include('includes/footer') %>
