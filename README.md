@@ -62,8 +62,9 @@ DB_PATH=./database/database.db
 ```
 
 ### 4. Execute o servidor
-```npm start
-# ou em modo desenvolvimento
+```
+npm start
+ou em modo desenvolvimento
 npm run dev
 ```
 
