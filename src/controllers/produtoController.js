@@ -19,10 +19,9 @@ exports.create = async (req, res) => {
       );
     }
 
-    // Redireciona para edição do contato recém-criado
+    // Redireciona para edição do produto recém-criado
     req.flash('success', `Produto cadastrado com sucesso! ID: ${novoProduto.id}`);
     return req.session.save(() =>
-      //to do: res.redirect(`/produto/index/${novoProduto.id}`) levar pra editar
       res.redirect('/create')
     );
 
