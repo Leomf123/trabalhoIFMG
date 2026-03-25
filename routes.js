@@ -4,8 +4,6 @@ const router = express.Router();
 const homeController = require('./src/controllers/homeController');
 const loginController = require('./src/controllers/loginController');
 const perfilController = require('./src/controllers/perfilController');
-// NOVOS: Importando os controllers de adicionar e deletar produtos
-const produtoDeleteController = require('./src/controllers/produtoDeleteController');
 // Controllers Produto
 const produtoController = require('./src/controllers/produtoController');
 const { csrfProtection, isAuthenticated } = require('./src/middlewares/middlewares');
@@ -28,8 +26,7 @@ router.post('/perfil/edit/:id', csrfProtection, perfilController.edit);
 router.get('/meus-produtos', isAuthenticated, produtoController.index);
 
 // Deletar produto
-router.post('/produtos/deletar/:id', produtoDeleteController.deleteProduto);
-router.get('/produtos/deletar/:id', produtoDeleteController.confirmDelete);
+router.get('/produtos/deletar/:id', isAuthenticated, produtoController.deleteProduto);
 
 // Cadastrar Produto
 router.get("/create", isAuthenticated, produtoController.createForm);

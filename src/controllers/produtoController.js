@@ -97,3 +97,34 @@ exports.index = async (req, res) => {
         return res.redirect('/');
     }
 };
+
+
+// Deletar produto
+exports.deleteProduto = async (req, res) => {
+     try {
+
+        const produtoId = req.params.id;
+        if (!produtoId) return res.render('404');
+
+        const produto = await Produto.buscarPorId(produtoId);
+
+        if (!produto) {
+            req.flash('errors', 'Produto não encontrado');
+            return res.redirect('/meus-produtos');
+        }
+
+        const produtoDeletado = await Produto.delete(produtoId);
+        if (!produtoDeletado || produtoDeletado.changes === 0) {
+            return res.render('404');
+        }
+
+        req.flash('success', 'Produto deletado com sucesso!');
+        req.session.save(() => res.redirect('/meus-produtos'));
+        return;
+
+    } catch (error) {
+        console.error("Erro ao deletar produto:", error);
+        req.flash('errors', 'Erro ao deletar produto');
+        return res.redirect('/meus-produtos');
+    }
+};

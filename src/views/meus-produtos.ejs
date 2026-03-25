@@ -32,38 +32,16 @@
                                            class="btn btn-outline-primary btn-sm">
                                             <i class="bi bi-pencil"></i> Editar
                                         </a>
-                                        <button type="button" 
-                                                class="btn btn-outline-danger btn-sm" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#deleteModal<%= produto.id %>">
+
+                                        <a href="/produtos/deletar/<%= produto.id %>" 
+                                           class="btn btn-outline-danger btn-sm">
                                             <i class="bi bi-trash"></i> Deletar
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Modal de Confirmação de Deleção -->
-                        <div class="modal fade" id="deleteModal<%= produto.id %>" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Confirmar Deleção</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Tem certeza que deseja deletar o produto <strong>"<%= produto.nome %>"</strong>?</p>
-                                        <p class="text-danger"><small>Esta ação não pode ser desfeita.</small></p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <form action="/produtos/deletar/<%= produto.id %>" method="POST" style="display: inline;">
-                                            <button type="submit" class="btn btn-danger">Sim, deletar</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     <% }) %>
                 </div>
             <% } else { %>
