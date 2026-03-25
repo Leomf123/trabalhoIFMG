@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const {connect} = require('./src/database/connection');
@@ -40,9 +41,9 @@ app.use((req, res, next) => {
     res.status(404).render('404');
 })
 
-const porta = 3000;
-app.listen(porta,() => {
+const PORT = process.env.PORT || 3000
+app.listen(PORT,() => {
     console.log("Servidor execuntado em: ");
-    console.log("http://127.0.0.1:" + porta);
+    console.log("http://127.0.0.1:" + PORT);
     connect();
 } );
