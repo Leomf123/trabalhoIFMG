@@ -74,17 +74,20 @@ Abra seu navegador e acesse: http://localhost:3000
 
 ## Estrutura do Projeto
 ```
-├── database/           # Banco de dados SQLite
-├── models/             # Modelos da aplicação (Usuarios, Produtos)
-├── controllers/        # Controladores das rotas
-├── views/              # Templates EJS
-│   ├── includes/       # Partials reutilizáveis (header, nav, footer)
-│   └── *.ejs          # Páginas principais
-├── public/            # Arquivos estáticos (CSS, JS, imagens)
-├── routes/            # Definição de rotas
-├── middlewares/       # Middlewares personalizados
-├── app.js             # Arquivo principal da aplicação
-└── package.json       # Dependências e scripts
+├── database/              # Banco de dados SQLite
+├── src
+    ├──models/             # Modelos da aplicação (Usuarios, Produtos)
+    ├── controllers/       # Controladores das rotas
+    ├── middlewares/       # Middlewares da aplicação
+    ├── database/          # Inicialização do banco de dados e criação de tabelas
+    ├── views/             # Templates EJS
+        ├── includes/      # Partials reutilizáveis (header, nav, footer)
+        └── *.ejs          # Páginas principais
+├── .gitignore           
+├── server.js              # Arquivo principal da aplicação
+├── routes.js              # Rotas da aplicação
+├── README.md              # Descrição da aplicação
+└── package.json           # Dependências e scripts
 ```
 ## Segurança
 Proteção CSRF em todos os formulários
