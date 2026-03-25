@@ -72,6 +72,7 @@ npm run dev
 Abra seu navegador e acesse: http://localhost:3000
 
 ## Estrutura do Projeto
+```
 ├── database/           # Banco de dados SQLite
 ├── models/             # Modelos da aplicação (Usuarios, Produtos)
 ├── controllers/        # Controladores das rotas
@@ -83,7 +84,7 @@ Abra seu navegador e acesse: http://localhost:3000
 ├── middlewares/       # Middlewares personalizados
 ├── app.js             # Arquivo principal da aplicação
 └── package.json       # Dependências e scripts
-
+```
 ## Segurança
 Proteção CSRF em todos os formulários
 
