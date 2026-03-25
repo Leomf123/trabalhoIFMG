@@ -6,7 +6,7 @@ class Produtos{
         this.errors = []; //armazenar erros que possa acontecer
     }
 
-    async register(){
+    async register(id){
         this.valida();
         if(this.errors.length > 0) return;
 
@@ -18,11 +18,13 @@ class Produtos{
                 `INSERT INTO products (
                 name,
                 description,
-                price) VALUES (?, ?, ?)`,
+                price,
+                usuario_id) VALUES (?, ?, ?, ?)`,
                 [
                     this.body.name,
                     this.body.description,
-                    this.body.price
+                    this.body.price,
+                    id
                 ]
             )
            

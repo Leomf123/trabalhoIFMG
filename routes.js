@@ -30,13 +30,14 @@ router.get('/meus-produtos', produtoListController.index);
 
 // Deletar produto
 router.post('/produtos/deletar/:id', produtoDeleteController.deleteProduto);
+router.get('/produtos/deletar/:id', produtoDeleteController.confirmDelete);
 
 // Rota para listar produtos de um usuário específico (para perfil público)
 router.get('/usuario/:id/produtos', produtoListController.listarPorUsuarioId);
 
 // Cadastrar Produto
 router.get("/create", isAuthenticated, produtoController.createForm);
-router.post("/create", csrfProtection, produtoController.create);
+router.post("/create/:id", csrfProtection, produtoController.create);
 
 // Editar Produto
 router.get('/produtos/editar/:id', isAuthenticated, produtoController.renderEditForm);

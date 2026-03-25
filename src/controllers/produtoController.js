@@ -10,7 +10,7 @@ exports.create = async (req, res) => {
   try {
 
     const produto = new Produto(req.body);
-    const novoProduto = await produto.register();
+    const novoProduto = await produto.register(req.params.id);
 
     if (produto.errors.length > 0) {
       req.flash('errors', produto.errors);
