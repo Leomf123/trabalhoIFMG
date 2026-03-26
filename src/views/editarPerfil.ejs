@@ -29,9 +29,12 @@
                 <label>Endereço de E-mail</label>
                 <input value="<%= usuario.email %>" type="email" class="form-control my-2" name="email">
               </div>
+              <div>
+                <a href="/perfil/senha/<%= usuario.id %>" class="text-primary">Alterar Senha</a>
+              </div>
               <button type="submit" class="btn btn-primary my-2">Salvar Alterações</button>
             </form>
-
+            
         </div>
         <div class="col-log-2"></div>
       </div>
