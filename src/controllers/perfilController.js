@@ -42,3 +42,42 @@ exports.edit = async function (req, res) {
     }
 };
 
+exports.editIndexPassword = async function (req, res) {
+    try {
+        const { id } = req.params;
+
+        if (!id) return res.render('404');
+
+        const usuario = await Usuario.buscarPorId(id);
+        if (!usuario) return res.render('404');
+
+        res.render('editarSenha', {usuario});
+        return;
+
+    } catch (e) {
+        console.error(e);
+        res.render('404');
+    }
+};
+
+exports.editPassword = async function (req, res) {
+    try {
+        const { id } = req.params;
+        if (!id) return res.render('404');
+        
+        const usuario = new Usuario(req.body);
+        await usuario.editPassword(id);
+
+        if (usuario.errors.length > 0) {
+            req.flash('errors', usuario.errors);
+            return req.session.save(() => res.redirect(`/perfil/senha/${id}`));
+        }
+
+        req.flash('success', 'Senha alterada com sucesso!');
+        req.session.save(() => res.redirect(`/perfil/index/${id}`));
+        return;
+    } catch (e) {
+        console.error(e);
+        return res.render('404');
+    }
+}

@@ -112,6 +112,42 @@ class Usuario {
         return await Usuario.buscarPorId(id);
     }
 
+    async editPassword(id) {
+        if (!id) return;
+
+        this.validaEditPassword();
+        if (this.errors.length > 0) return;
+
+        const user = await Usuario.buscarPorId(id);
+
+        if (!user) {
+            this.errors.push('Usuário não encontrado!');
+            return;
+        }
+
+        const senhaValida = await bcrypt.compare(
+            this.body.password3, user.password
+        );
+
+        if (!senhaValida) {
+            this.errors.push('Senha atual inválida!');
+            return;
+        }
+
+        const salt = await bcrypt.genSalt(12);
+        const hash = await bcrypt.hash(this.body.password, salt);
+
+        await db.run(
+            `UPDATE usuarios SET password = ? WHERE id = ?`,
+            [
+                hash,
+                id
+            ]
+        );
+
+        return await Usuario.buscarPorId(id);
+    }
+
     async userExistsEdit(email, id = null) {
 
         if (!email) return;
@@ -211,6 +247,26 @@ class Usuario {
         }
     }
 
+    validaEditPassword() {
+        this.cleanUp();
+
+        if (!this.body.password) {
+            this.errors.push('Nova senha é obrigatória!');
+        }
+        if (!this.body.password2) {
+            this.errors.push('Confirmação de senha obrigatória!');
+        }
+        if (!this.body.password3) {
+            this.errors.push('Senha atual obrigatória!');
+        }
+        if (this.body.password && (this.body.password.length < 6 || this.body.password.length > 50)) {
+            this.errors.push('A senha deve ter entre 6 e 50 caracteres!');
+        }
+        if (this.body.password !== this.body.password2) {
+            this.errors.push('As novas senhas devem ser iguais');
+        }
+    }
+
     cleanUp() {
         for (let key in this.body) {
             if (typeof this.body[key] !== 'string') {
@@ -223,8 +279,9 @@ class Usuario {
             nomeLoja: this.body.nomeLoja || '',
             descricaoLoja: this.body.descricaoLoja || '',
             email: this.body.email || '',
-            password: this.body.password || '',
-            password2: this.body.password2 || ''
+            password: this.body.password || '', //Sempre será a nova senha (cadastro ou atualizar)
+            password2: this.body.password2 || '', //Confirmar senha (igual a password no cadastrou ou a password3 em atualizar)
+            password3: this.body.password3 || '' //usada no atualizar senha, será a antiga a ser substituida
         };
 
     }

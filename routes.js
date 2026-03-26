@@ -20,6 +20,8 @@ router.post('/login/register', csrfProtection, loginController.register);
 //Rotas Perfil Usuário
 router.get('/perfil/index/:id', isAuthenticated, perfilController.editIndex);
 router.post('/perfil/edit/:id', csrfProtection, isAuthenticated, perfilController.edit);
+router.get('/perfil/senha/:id', isAuthenticated, perfilController.editIndexPassword);
+router.post('/perfil/senha/:id', csrfProtection, isAuthenticated, perfilController.editPassword);
 
 // Rotas de Produtos
 // Listar produtos do usuário logado
