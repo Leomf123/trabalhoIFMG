@@ -1,0 +1,40 @@
+<%- include('./includes/head') %>
+  <%- include('./includes/nav') %>
+    <%- include('./includes/messages') %>
+
+      <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card p-4 shadow w-100 border-0" style="max-width: 400px;">
+
+          <h4 class="text-center mb-4">Altere sua senha:</h4>
+          <form action="/perfil/senha/<%= usuario.id %>" method="POST">
+            <input type="hidden" name="CSRFToken" value="<%= csrfToken %>">
+            <div class="mb-3">
+              <label class="form-label">Senha Atual:</label>
+              <input type="password" name="password3" class="form-control" placeholder="Digite sua senha atual">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Nova senha:</label>
+              <input type="password" name="password" class="form-control" placeholder="Digite sua nova senha">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Confirme nova senha:</label>
+              <input type="password" name="password2" class="form-control" placeholder="Confirme sua nova senha">
+            </div>
+
+            <div class="d-flex justify-content-center gap-2 mt-3">
+              <button type="submit" class="btn btn-primary">
+                Salvar nova senha
+              </button>
+
+              <a href="/perfil/index/<%=usuario.id%>" class="btn btn-secondary">
+                Cancelar
+              </a>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+      <%- include('./includes/footer') %>
