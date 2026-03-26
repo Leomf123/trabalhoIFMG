@@ -27,7 +27,7 @@ function connect(){
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT UNIQUE NOT NULL,
             description TEXT NOT NULL,
-            price TEXT NOT NULL,
+            price REAL NOT NULL,
             usuario_id INTEGER,
             FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
         )
